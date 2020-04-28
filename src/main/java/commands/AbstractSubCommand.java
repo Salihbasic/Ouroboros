@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import sedexlives.SedexLives;
+import sedexlives.SedexLivesPermissions;
 
 /**
  * Represents an abstract SedexLives sub-command.
@@ -108,7 +109,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
 
         for (PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
 
-            if (perm.getPermission().startsWith("sedexlives.maxlives.")) {
+            if (perm.getPermission().startsWith(SedexLivesPermissions.MAXLIVES_NUMBER)) {
 
                 String[] split = perm.getPermission().split("\\.");
                 if (split.length >= 3) {

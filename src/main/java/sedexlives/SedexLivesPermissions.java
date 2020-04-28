@@ -38,8 +38,9 @@ public class SedexLivesPermissions {
     public static final String KEEP_EXP = "sedexlives.keepxp"; // Lets the player keep their XP on death.
     public static final String CHECK_LIVES = "sedexlives.check"; // Lets the player check their own lives.
     public static final String CHECK_LIVES_OTHERS = "sedexlives.check.others"; // Lets the player check others' lives.
-    public static final String CHECK_MAXLIVES = "sedexlives.check.maxlives";
-    public static final String CHECK_MAXLIVES_OTHERS = "sedexlives.check.maxlives.others";
+    public static final String CHECK_MAXLIVES = "sedexlives.check.maxlives"; // Lets player check their maxlives.
+    public static final String CHECK_MAXLIVES_OTHERS = "sedexlives.check.maxlives.others"; // Lets player check others' maxlives.
+    public static final String MAXLIVES_NUMBER = "sedexlives.maxlives."; // Used to declare player's maxlives.
     public static final String SET_LIVES = "sedexlives.set"; // Lets the player set others' lives.
 
 }
