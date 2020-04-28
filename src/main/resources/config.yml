@@ -1,4 +1,4 @@
-# Default amount of lives every player gets for the first time
+# Database config
 mysql:
   hostname: localhost
   port: 3306
