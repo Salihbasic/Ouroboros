@@ -1,0 +1,14 @@
+# Default amount of lives every player gets for the first time
+mysql:
+  hostname: localhost
+  port: 3306
+  username: username
+  password: password
+  database: database
+
+# How many lives all players get by default
+defaultLives: 3
+
+# Lives message. %sedexlives_lives% for player lives.
+# Supports all PlaceholdersAPI placeholders.
+livesMessage: '&8[&6Lives&8] &f%player% has: %sedexlives_lives%'

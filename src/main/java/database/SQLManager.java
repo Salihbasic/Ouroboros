@@ -1,0 +1,196 @@
+package database;
+
+import sedexlives.ConfigManager;
+import sedexlives.SedexLives;
+
+import java.sql.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class SQLManager {
+    private static SQLManager sqlManager = null;
+
+    private String hostname;
+    private String port;
+    private String username;
+    private String password;
+    private String database;
+
+    private SQLManager(final String hostname, final String port, final String username,
+                       final String password, final String database) {
+
+        this.hostname = hostname;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+        this.database = database;
+
+    }
+
+    /**
+     * Attempts to return an instance of {@link SQLManager}.
+     *
+     * @param plugin Instance of plugin
+     * @return Instance of this class
+     */
+    public static synchronized SQLManager getSQLManager(SedexLives plugin) {
+        final ConfigManager configManager = plugin.getConfigManager();
+
+        if (sqlManager == null) {
+            sqlManager = new SQLManager(configManager.getHostname(), configManager.getPort(), configManager.getUsername(),
+                    configManager.getPassword(), configManager.getDatabase());
+        }
+
+        return sqlManager;
+    }
+
+    /*
+    Attempts to close whatever is passed in parameters.
+     */
+    public void closeEverything(Connection connection, PreparedStatement statement, ResultSet resultSet) {
+
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {}
+        }
+
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {}
+        }
+
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {}
+        }
+    }
+
+    /**
+     * Updates table with a prepared statement.
+     *
+     * @param sql Prepared statement
+     */
+    public void update(final String sql) {
+
+        PreparedStatement statement = null;
+
+        try {
+            Connection connection = this.getConnection();
+
+            assert connection != null;
+            statement = connection.prepareStatement(sql);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeEverything(null, statement, null);
+        }
+
+    }
+
+    /**
+     * Queries the database with a prepared statement.
+     *
+     * @param sql Prepared statement
+     * @return ResultSet with query values
+     */
+    public ResultSet query(final String sql) {
+
+        PreparedStatement statement;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = this.getConnection();
+
+            assert connection != null;
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery(sql);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultSet;
+    }
+
+    /**
+     * Attempts to get a connection to the database.
+     *
+     * @return {@link Connection} if connection was successful, {@code null} otherwise
+     */
+    public Connection getConnection() {
+        final String connStr = "jdbc:mysql://" + hostname + ":" + port + "/" + database + "?user=" + username + "&password=" +
+                password;
+
+        try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+            return DriverManager.getConnection(connStr);
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Enters the database from a separate thread and attempts to query a value based on UUID.
+     * Value returned is a {@link CompletableFuture} which can then be further used to obtain the actual query value.
+     *
+     * The default value (returned if the query failed) is {@code -1}. This can further be used for error checking.
+     *
+     * @param uuid Player's UUID
+     * @return {@link CompletableFuture} with the query result if successful or with {@code -1} if not
+     */
+    public CompletableFuture<Integer> getPlayerLivesAsync(final String uuid) {
+
+        return CompletableFuture.supplyAsync(() -> {
+
+            int lives = -1;
+
+            final String query = "SELECT * FROM sl_lives WHERE uuid='" + uuid + "'";
+
+            try (ResultSet resultSet = this.query(query)) {
+
+                if (resultSet == null) // Query failed
+                    return lives;
+
+                if (resultSet.next()) { // Either empty or contains value
+                    lives = resultSet.getInt("lives");
+                    resultSet.close();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return lives;
+
+        });
+    }
+
+    /*
+    Wrapper method for getPlayerLives(final String uuid) method above. Unwraps the completable future.
+     */
+    public int getPlayerLives(final String uuid) {
+        try {
+            return getPlayerLivesAsync(uuid).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /*
+     * Creates the main table if it does not exist.
+     */
+    public void setUpTable() {
+        final String update = "CREATE TABLE IF NOT EXISTS sl_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
+        this.update(update);
+    }
+}

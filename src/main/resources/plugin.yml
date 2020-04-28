@@ -1,0 +1,39 @@
+name: SedexLives
+version: ${project.version}
+main: sedexlives.SedexLives
+author: Steinein_
+description: Allows players to use lives in order to keep their inventory or XP.
+api-version: "1.15"
+
+softdepend: [PlaceholderAPI]
+
+commands:
+  lives:
+    description: Main SedexLives command
+    usage: /<command>
+
+permissions:
+  sedexlives.use:
+    description: Lets players use the SedexLives system.
+    default: op
+  sedexlives.keepxp:
+    description: Lets players keep their XP on death.
+    default: op
+  sedexlives.check:
+    description: Lets players check their own lives.
+    default: op
+  sedexlives.check.others:
+    description: Lets players check others' lives.
+    default: op
+  sedexlives.check.maxlives:
+    description: Lets players check their own max lives.
+    default: op
+  sedexlives.check.maxlives.others:
+    description: Lets players check others' lives.
+    default: op
+  sedexlives.set:
+    description: Lets players set their own or others' lives.
+    default: op
+  sedexlives.maxlives:
+    description: Defines the maximum amount of lives a player may have.
+    default: op
