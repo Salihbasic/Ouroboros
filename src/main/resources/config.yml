@@ -6,9 +6,13 @@ mysql:
   password: password
   database: database
 
-# How many lives all players get by default
+# How many lives all players get by default.
+#
+# This also defines the maximum amount of lives a player may have,
+# unless they hold the permission 'sedexlives.maxlives.#' permission,
+# where '#' is any number.
 defaultLives: 3
 
 # Lives message. %sedexlives_lives% for player lives.
 # Supports all PlaceholdersAPI placeholders.
-livesMessage: '&8[&6Lives&8] &f%player% has: %sedexlives_lives%'
+livesMessage: '&8[&6Lives&8] &aYou have %sedexlives_lives% lives.'
