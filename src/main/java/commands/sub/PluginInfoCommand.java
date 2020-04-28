@@ -28,6 +28,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import sedexlives.SedexLives;
+import sedexlives.SedexLivesPermissions;
 
 public class PluginInfoCommand extends AbstractSubCommand {
 
@@ -45,6 +46,11 @@ public class PluginInfoCommand extends AbstractSubCommand {
 
             if (args.length > 2) {
                 tooManyArguments(commandSender, getHelp());
+                return true;
+            }
+
+            if (!hasPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
+                noPermissionMessage(commandSender);
                 return true;
             }
 
