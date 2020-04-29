@@ -24,7 +24,6 @@ SOFTWARE.
 package commands.sub;
 
 import commands.AbstractSubCommand;
-import database.SQLManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,7 +34,6 @@ import sedexlives.SedexLivesPermissions;
 public class GetMaxlivesCommand extends AbstractSubCommand {
 
     private SedexLives plugin = SedexLives.getSedexLives();
-    private SQLManager sqlManager = SQLManager.getSQLManager(plugin);
 
     /*
     Defines the sub-command "maxlives" used to get the maximum lives a player can have.
