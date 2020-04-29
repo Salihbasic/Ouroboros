@@ -30,6 +30,8 @@ import listeners.PlayerJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 public class SedexLives extends JavaPlugin {
 
     private static SedexLives plugin = null;
@@ -76,6 +78,18 @@ public class SedexLives extends JavaPlugin {
     public void reloadConfig() {
         super.reloadConfig();
         configManager = new ConfigManager(this.getConfig());
+    }
+
+    /**
+     * Sends debug messages to console if debug is true in the config.
+     *
+     * @param message
+     */
+    public void debugMessage(String message) {
+
+        if (getConfigManager().debugEnabled())
+            plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
+
     }
 
     /**

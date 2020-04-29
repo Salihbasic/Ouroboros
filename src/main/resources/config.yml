@@ -1,3 +1,6 @@
+# Set this to true to get debug information in the console.
+debug: false
+
 # Database config
 mysql:
   hostname: localhost
