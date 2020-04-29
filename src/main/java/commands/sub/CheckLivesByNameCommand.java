@@ -51,7 +51,6 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 "Attempts to get lives of a player. Only works for online players.\n";
     }
 
-    public static final String CHECK_MAXLIVES = "sedexlives.check.maxlives";
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
 
