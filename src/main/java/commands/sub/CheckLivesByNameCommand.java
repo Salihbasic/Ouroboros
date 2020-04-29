@@ -47,7 +47,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives get [player] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
+        return ChatColor.RED + "/lives check [player] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
                 "Attempts to get lives of a player. Only works for online players.\n";
     }
 
