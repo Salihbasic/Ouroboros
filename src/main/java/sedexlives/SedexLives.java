@@ -41,6 +41,8 @@ public class SedexLives extends JavaPlugin {
 
     private boolean papiHooked = false;
 
+    private SedexLives() {}
+
     @Override
     public void onEnable() {
         plugin = this;

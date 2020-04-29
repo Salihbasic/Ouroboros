@@ -70,7 +70,7 @@ public class SQLManager {
     /*
     Attempts to close whatever is passed in parameters.
      */
-    public void closeEverything(Connection connection, PreparedStatement statement, ResultSet resultSet) {
+    private void closeEverything(Connection connection, PreparedStatement statement, ResultSet resultSet) {
 
         if (connection != null) {
             try {
@@ -170,7 +170,7 @@ public class SQLManager {
      * @param uuid Player's UUID
      * @return {@link CompletableFuture} with the query result if successful or with {@code -1} if not
      */
-    public CompletableFuture<Integer> getPlayerLivesAsync(final String uuid) {
+    private CompletableFuture<Integer> getPlayerLivesAsync(final String uuid) {
 
         return CompletableFuture.supplyAsync(() -> {
 
