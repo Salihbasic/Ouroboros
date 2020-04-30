@@ -46,8 +46,6 @@ public class SedexLives extends JavaPlugin {
 
     private List<Player> toggledOff;
 
-    private SedexLives() {}
-
     @Override
     public void onEnable() {
         plugin = this;
