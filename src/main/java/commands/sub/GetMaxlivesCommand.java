@@ -62,7 +62,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
             if (args.length == 1) { // Executed /lives maxlives
 
                 if (!(commandSender instanceof Player)) {
-                    commandSender.sendMessage("Only players can execute this command!");
+                    invalidSenderMessage(commandSender);
                     return true;
                 }
 

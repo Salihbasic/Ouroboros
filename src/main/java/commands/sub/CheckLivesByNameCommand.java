@@ -64,7 +64,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
             if (args.length == 1) { // Executed /lives get
 
                 if (!(commandSender instanceof Player)) {
-                    commandSender.sendMessage("Only players can execute this command!");
+                    invalidSenderMessage(commandSender);
                     return true;
                 }
 
