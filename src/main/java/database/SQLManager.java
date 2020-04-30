@@ -33,6 +33,8 @@ import java.util.concurrent.ExecutionException;
 public class SQLManager {
     private static SQLManager sqlManager = null;
 
+    private SedexLives plugin = SedexLives.getSedexLives();
+
     private String hostname;
     private String port;
     private String username;
@@ -70,24 +72,36 @@ public class SQLManager {
     /*
     Attempts to close whatever is passed in parameters.
      */
-    public void closeEverything(Connection connection, PreparedStatement statement, ResultSet resultSet) {
+    private void closeEverything(Connection connection, PreparedStatement statement, ResultSet resultSet) {
 
         if (connection != null) {
             try {
+                plugin.debugMessage("Attempting to close database connection.");
                 connection.close();
-            } catch (SQLException e) {}
+                plugin.debugMessage("Successfully closed database connection.");
+            } catch (SQLException e) {
+                plugin.debugMessage("Failed while attempting to close database connection.");
+            }
         }
 
         if (statement != null) {
             try {
+                plugin.debugMessage("Attempting to close statement.");
                 statement.close();
-            } catch (SQLException e) {}
+                plugin.debugMessage("Successfully closed statement.");
+            } catch (SQLException e) {
+                plugin.debugMessage("Failed while attempting to close statement.");
+            }
         }
 
         if (resultSet != null) {
             try {
+                plugin.debugMessage("Attempting to close result set.");
                 resultSet.close();
-            } catch (SQLException e) {}
+                plugin.debugMessage("Successfully closed result set.");
+            } catch (SQLException e) {
+                plugin.debugMessage("Failed while attempting to close result set.");
+            }
         }
     }
 
@@ -104,10 +118,15 @@ public class SQLManager {
             Connection connection = this.getConnection();
 
             assert connection != null;
+
             statement = connection.prepareStatement(sql);
+
+            plugin.debugMessage("Preparing statement for update.");
             statement.executeUpdate();
+            plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
         } catch (SQLException e) {
+            plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
             e.printStackTrace();
         } finally {
             this.closeEverything(null, statement, null);
@@ -130,10 +149,15 @@ public class SQLManager {
             Connection connection = this.getConnection();
 
             assert connection != null;
+
             statement = connection.prepareStatement(sql);
+
+            plugin.debugMessage("Preparing statement for query.");
             resultSet = statement.executeQuery(sql);
+            plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
 
         } catch (SQLException e) {
+            plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
             e.printStackTrace();
         }
 
@@ -155,6 +179,7 @@ public class SQLManager {
             return DriverManager.getConnection(connStr);
 
         } catch (ClassNotFoundException | SQLException e) {
+            plugin.debugMessage("Error while attempting to open database connection.");
             e.printStackTrace();
         }
 
@@ -170,25 +195,31 @@ public class SQLManager {
      * @param uuid Player's UUID
      * @return {@link CompletableFuture} with the query result if successful or with {@code -1} if not
      */
-    public CompletableFuture<Integer> getPlayerLivesAsync(final String uuid) {
+    private CompletableFuture<Integer> getPlayerLivesAsync(final String uuid) {
 
         return CompletableFuture.supplyAsync(() -> {
 
             int lives = -1;
 
+            plugin.debugMessage("Attempting to get player lives for UUID (" + uuid + ")");
             final String query = "SELECT * FROM sl_lives WHERE uuid='" + uuid + "'";
 
             try (ResultSet resultSet = this.query(query)) {
 
-                if (resultSet == null) // Query failed
+                if (resultSet == null) {
+                    plugin.debugMessage("Query failed. ResultSet is null.");
                     return lives;
+                }
 
                 if (resultSet.next()) { // Either empty or contains value
+                    plugin.debugMessage("Received ResultSet. Attempting to get lives.");
                     lives = resultSet.getInt("lives");
+                    plugin.debugMessage("Retrieved lives from ResultSet. Lives value (" + lives + ")");
                     resultSet.close();
                 }
 
             } catch (SQLException e) {
+                plugin.debugMessage("Failed to retrieve player lives for UUID (" + uuid + ")");
                 e.printStackTrace();
             }
 
@@ -213,6 +244,7 @@ public class SQLManager {
      * Creates the main table if it does not exist.
      */
     public void setUpTable() {
+        plugin.debugMessage("Attempting to set up tables if they do not exist.");
         final String update = "CREATE TABLE IF NOT EXISTS sl_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
         this.update(update);
     }

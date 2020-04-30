@@ -37,6 +37,8 @@ public class ConfigManager {
 
     // Config paths
 
+    private final String DEBUG_PATH = "debug";
+
     private final String USERNAME_PATH = "mysql.username";
     private final String PASSWORD_PATH = "mysql.password";
     private final String HOSTNAME_PATH = "mysql.hostname";
@@ -53,6 +55,10 @@ public class ConfigManager {
     }
 
     // Getters
+
+    public boolean debugEnabled() {
+        return configuration.getBoolean(DEBUG_PATH);
+    }
 
     public String getUsername() {
         return configuration.getString(USERNAME_PATH);

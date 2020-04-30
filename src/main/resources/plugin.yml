@@ -37,6 +37,9 @@ permissions:
   sedexlives.maxlives:
     description: Defines the maximum amount of lives a player may have.
     default: op
+  sedexlives.toggle:
+    description: Toggles lives system on or off.
+    default: op
   sedexlives.reload:
     description: Reloads the plugin config.
     default: op

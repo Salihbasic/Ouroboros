@@ -47,11 +47,10 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives get [player] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
+        return ChatColor.RED + "/lives check [player] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
                 "Attempts to get lives of a player. Only works for online players.\n";
     }
 
-    public static final String CHECK_MAXLIVES = "sedexlives.check.maxlives";
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
 
@@ -65,7 +64,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
             if (args.length == 1) { // Executed /lives get
 
                 if (!(commandSender instanceof Player)) {
-                    commandSender.sendMessage("Only players can execute this command!");
+                    invalidSenderMessage(commandSender);
                     return true;
                 }
 

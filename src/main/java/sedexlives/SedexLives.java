@@ -28,7 +28,12 @@ import database.SQLManager;
 import listeners.PlayerDeath;
 import listeners.PlayerJoin;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 public class SedexLives extends JavaPlugin {
 
@@ -38,6 +43,8 @@ public class SedexLives extends JavaPlugin {
     private CommandManager commandManager = null;
 
     private boolean papiHooked = false;
+
+    private List<Player> toggledOff;
 
     @Override
     public void onEnable() {
@@ -62,6 +69,8 @@ public class SedexLives extends JavaPlugin {
         commandManager = new CommandManager();
         this.getServer().getPluginCommand("lives").setExecutor(commandManager);
 
+        toggledOff = new ArrayList<>();
+
     }
 
     private void registerListeners() {
@@ -76,6 +85,18 @@ public class SedexLives extends JavaPlugin {
     public void reloadConfig() {
         super.reloadConfig();
         configManager = new ConfigManager(this.getConfig());
+    }
+
+    /**
+     * Sends debug messages to console if debug is true in the config.
+     *
+     * @param message
+     */
+    public void debugMessage(String message) {
+
+        if (getConfigManager().debugEnabled())
+            plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
+
     }
 
     /**
@@ -98,6 +119,15 @@ public class SedexLives extends JavaPlugin {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    /**
+     * Represents all players that have toggled off the lives.
+     *
+     * @return List of all players who have toggled off lives
+     */
+    public List<Player> getToggledOff() {
+        return toggledOff;
     }
 
     /**

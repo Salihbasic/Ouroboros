@@ -97,6 +97,13 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
         sender.sendMessage(ChatColor.RED + "Correct usage:\n" + help);
     }
 
+    /*
+    Message sent if the player is not supposed to execute the command.
+     */
+    public void invalidSenderMessage(CommandSender sender) {
+        sender.sendMessage("Only players can execute this command!");
+    }
+
     /**
      * Iteraters over {@link Player}'s permissions and attempts to find {@code 'sedexlives.maxlives.#'} permission.
      * It then splits this permission and attempts to return number in place of {@code '#'}. If there is no number there,

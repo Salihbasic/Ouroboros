@@ -47,6 +47,7 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
         subCommands.put("check", new CheckLivesByNameCommand());
         subCommands.put("maxlives", new GetMaxlivesCommand());
         subCommands.put("set", new SetLivesByNameCommand());
+        subCommands.put("toggle", new ToggleLivesCommand());
     }
 
 
@@ -58,6 +59,7 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
                 subCommands.get("info").getHelp() +
                 subCommands.get("check").getHelp() +
                 subCommands.get("maxlives").getHelp() +
+                subCommands.get("toggle").getHelp() +
                 subCommands.get("set").getHelp();
     }
 

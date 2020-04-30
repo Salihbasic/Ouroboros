@@ -42,7 +42,8 @@ public class PlayerDeath implements Listener {
         Player player = event.getEntity();
         final String uuid = player.getUniqueId().toString();
 
-        if (player.hasPermission(SedexLivesPermissions.USE_LIVES)) { // Without the permission nothing happens
+        if (player.hasPermission(SedexLivesPermissions.USE_LIVES) &&
+                !plugin.getToggledOff().contains(player)) {
 
             int lives = sqlManager.getPlayerLives(uuid);
 
