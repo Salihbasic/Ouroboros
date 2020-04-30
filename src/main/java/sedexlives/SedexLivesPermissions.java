@@ -42,6 +42,6 @@ public class SedexLivesPermissions {
     public static final String CHECK_MAXLIVES_OTHERS = "sedexlives.check.maxlives.others"; // Lets player check others' maxlives.
     public static final String MAXLIVES_NUMBER = "sedexlives.maxlives."; // Used to declare player's maxlives.
     public static final String SET_LIVES = "sedexlives.set"; // Lets the player set others' lives.
-    public static final String TOGGLE_OFF_LIVES = "sedexlives.toggle.off"; // Lets the player toggle off the lives system.
+    public static final String TOGLE_LIVES = "sedexlives.toggle"; // Lets the player toggle off the lives system.
 
 }
