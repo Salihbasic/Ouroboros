@@ -21,19 +21,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package sedexlives;
+package hooks;
 
-import database.SQLManager;
+import sedexlives.LivesUser;
+import sedexlives.SedexLives;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
 /*
 Do not touch. Expansion for PlaceholderAPI that adds custom plugin placeholder.
  */
-public class SedexLivesExpansion extends PlaceholderExpansion {
+public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
     private SedexLives plugin = SedexLives.getSedexLives();
-    private SQLManager sqlManager = SQLManager.getSQLManager(plugin);
 
     @Override
     public boolean persist() {
@@ -66,11 +66,13 @@ public class SedexLivesExpansion extends PlaceholderExpansion {
         if (player == null)
             return "";
 
+        LivesUser user = new LivesUser(plugin, player);
+
         if (identifier.equals("lives"))
-            return String.valueOf(sqlManager.getPlayerLives(player.getUniqueId().toString()));
+            return String.valueOf(user.getLives());
 
         if (identifier.equals("maxlives"))
-            return String.valueOf(plugin.getCommandManager().getPlayerMaxLives(player));
+            return String.valueOf(user.getMaxLives());
 
         return null;
     }

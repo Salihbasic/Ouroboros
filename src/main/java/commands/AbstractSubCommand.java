@@ -27,10 +27,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
 
 /**
  * Represents an abstract SedexLives sub-command.
@@ -56,6 +52,17 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
      * @return Command help message
      */
     public abstract String getHelp();
+
+    /**
+     * Formats the command help message according to the standard formatting for this plugin.
+     *
+     * @param command Command (format: {@code /lives <subcommand> <args>})
+     * @param description Command description
+     * @return Formatted help message
+     */
+    public String formatHelp(String command, String description) {
+        return ChatColor.RED + command + ChatColor.WHITE + " - " + ChatColor.GREEN + description + "\n";
+    }
 
     @Override
     public abstract boolean onCommand(CommandSender commandSender, Command command, String label, String[] args);
@@ -104,29 +111,4 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
         sender.sendMessage("Only players can execute this command!");
     }
 
-    /**
-     * Iteraters over {@link Player}'s permissions and attempts to find {@code 'sedexlives.maxlives.#'} permission.
-     * It then splits this permission and attempts to return number in place of {@code '#'}. If there is no number there,
-     * or if the player has no permission, it returns the default maximum lives.
-     *
-     * @param player Player to be checked
-     * @return Player's maximum lives
-     */
-    public int getPlayerMaxLives(Player player) {
-
-        for (PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
-
-            if (perm.getPermission().startsWith(SedexLivesPermissions.MAXLIVES_NUMBER)) {
-
-                String[] split = perm.getPermission().split("\\.");
-                if (split.length >= 3) {
-                    return Integer.parseInt(split[2]);
-                }
-
-            }
-
-        }
-
-        return SedexLives.getSedexLives().getConfigManager().getDefaultLives();
-    }
 }

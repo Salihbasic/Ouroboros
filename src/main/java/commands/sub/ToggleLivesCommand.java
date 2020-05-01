@@ -5,18 +5,28 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sedexlives.LivesUser;
 import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 public class ToggleLivesCommand extends AbstractSubCommand {
 
     private SedexLives plugin = SedexLives.getSedexLives();
 
+    /*
+    Defines the sub-command "toggle" used to toggle user's lives system.
+    If their lives are toggled off, they will not lose any lives on death, but they will lose items and XP.
+
+    Toggle is reset whenever player leaves the game.
+
+    Usage: /lives toggle
+     */
+
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives toggle " + ChatColor.WHITE + "- " + ChatColor.GREEN +
+        return formatHelp("/lives toggle",
                 "Toggles lives on or off. When toggled off, lives system will not affect you. " +
-                "Works only for a single session.\n";
+                        "Works only for a single session.");
     }
 
     @Override
@@ -39,16 +49,17 @@ public class ToggleLivesCommand extends AbstractSubCommand {
             }
 
             Player playerSender = (Player) commandSender;
+            LivesUser user = new LivesUser(plugin, playerSender);
 
-            if (plugin.getToggledOff().contains(playerSender)) {
+            if (user.isToggledOff()) {
 
-                plugin.getToggledOff().remove(playerSender);
-                playerSender.sendMessage(ChatColor.GREEN + "Your lives have been toggled on.");
+                user.setToggledOff(false);
+                user.getUser().sendMessage(ChatColor.GREEN + "Your lives have been toggled on.");
 
             } else {
 
-                plugin.getToggledOff().add(playerSender);
-                playerSender.sendMessage(ChatColor.GREEN + "Your lives have been toggled off.");
+                user.setToggledOff(true);
+                user.getUser().sendMessage(ChatColor.GREEN + "Your lives have been toggled off.");
 
             }
 

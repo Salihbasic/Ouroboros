@@ -28,15 +28,23 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 public class PluginInfoCommand extends AbstractSubCommand {
 
     private SedexLives plugin = SedexLives.getSedexLives();
 
+    /*
+    Defines the sub-command "info" which returns basic information about the plugin.
+    Information contains plugin name, version and author.
+
+    Usage: /lives info
+     */
+
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives info " + ChatColor.WHITE + "- " + ChatColor.GREEN + "Displays plugin info.\n";
+        return formatHelp("/lives info",
+                "Displays plugin info.");
     }
 
     @Override
