@@ -24,19 +24,17 @@ SOFTWARE.
 package commands.sub;
 
 import commands.AbstractSubCommand;
-import database.SQLManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import sedexlives.LivesUser;
 import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 public class SetLivesByNameCommand extends AbstractSubCommand {
 
     private SedexLives plugin = SedexLives.getSedexLives();
-    private SQLManager sqlManager = SQLManager.getSQLManager(plugin);
 
     /*
     Defines the sub-command "set" used to set the value of lives.
@@ -55,9 +53,9 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives set <player> <value> [override] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
+        return formatHelp("/lives set <player> <value> [override]",
                 "Attempts to set lives of a player where value is amount of lives. If override is true it will " +
-                "override any maxlives permissions. Only works for online players.\n";
+                        "override any maxlives permissions. Only works for online players.");
     }
 
     @Override
@@ -86,8 +84,8 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
                 return true;
             }
 
-            final String username = args[1];
-            Player target = plugin.getServer().getPlayer(username);
+            Player target = plugin.getServer().getPlayer(args[1]);
+            LivesUser targetUser = new LivesUser(plugin, target);
 
             final int value = Integer.parseInt(args[2]);
 
@@ -96,19 +94,19 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
                 return true;
             }
 
-            if (target != null) { // Player exists
-
-                final String targetUUID = target.getUniqueId().toString();
+            if (targetUser.getUser() != null) { // Player exists
 
                 if (override) { // Override is true
 
-                    updater(targetUUID, value).runTaskAsynchronously(plugin);
+                    targetUser.updateLives(value);
+                    successMessage(commandSender, targetUser.getUser().getName(), value);
 
                 } else { // Override is false
 
-                    if (!(value > getPlayerMaxLives(target))) { // Value is less than or equal to max lives
+                    if (!(value > targetUser.getMaxLives())) { // Value is less than or equal to max lives
 
-                        updater(targetUUID, value).runTaskAsynchronously(plugin);
+                        targetUser.updateLives(value);
+                        successMessage(commandSender, targetUser.getUser().getName(), value);
 
                     } else { // Value is greater than maxlives
 
@@ -120,7 +118,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
             } else { // Player not found
 
-                playerNotFound(commandSender, username);
+                playerNotFound(commandSender, args[1]);
 
             }
 
@@ -129,17 +127,8 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
         return true;
     }
 
-    private BukkitRunnable updater(String uuid, int newLives) {
-        return new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                final String sql = "UPDATE sl_lives SET lives = " + newLives + " WHERE uuid = '" + uuid + "';";
-
-                sqlManager.update(sql);
-            }
-
-        };
+    private void successMessage(CommandSender sender, String playerName, final int lives) {
+        sender.sendMessage(ChatColor.GREEN + "Successfully set lives of " + playerName + " to " + lives + ".");
     }
 
 }

@@ -28,7 +28,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 public class ReloadLivesCommand extends AbstractSubCommand {
 
@@ -42,7 +42,8 @@ public class ReloadLivesCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives reload " + ChatColor.WHITE + "- " + ChatColor.GREEN + "Reloads the config.\n";
+        return formatHelp("/lives reload",
+                "Reloads the config.");
     }
 
     @Override

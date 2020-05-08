@@ -24,18 +24,16 @@ SOFTWARE.
 package commands.sub;
 
 import commands.AbstractSubCommand;
-import database.SQLManager;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sedexlives.LivesUser;
 import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 public class CheckLivesByNameCommand extends AbstractSubCommand {
 
     private SedexLives plugin = SedexLives.getSedexLives();
-    private SQLManager sqlManager = SQLManager.getSQLManager(plugin);
 
     /*
     Defines the sub-command "get" used to get the value of lives.
@@ -47,8 +45,8 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives check [player] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
-                "Attempts to get lives of a player. Only works for online players.\n";
+        return formatHelp("/lives check [player]",
+                "Attempts to get lives of a player. Only works for online players.");
     }
 
     @Override
@@ -69,11 +67,10 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 }
 
                 final Player playerSender = (Player) commandSender;
-                final String senderUUID = playerSender.getUniqueId().toString();
+                LivesUser user = new LivesUser(plugin, playerSender);
 
-                int lives = sqlManager.getPlayerLives(senderUUID);
-                playerSender.sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(),
-                        playerSender, lives));
+                user.getUser().sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(),
+                        user.getUser(), user.getLives()));
 
             }
 
@@ -84,20 +81,17 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                     return true;
                 }
 
-                final String username = args[1];
-                final Player target = plugin.getServer().getPlayerExact(username);
+                final Player target = plugin.getServer().getPlayerExact(args[1]);
+                LivesUser targetUser = new LivesUser(plugin, target);
 
-                if (target != null) { // Player found
+                if (targetUser.getUser() != null) {
 
-                    final String targetUUID = target.getUniqueId().toString();
-
-                    int lives = sqlManager.getPlayerLives(targetUUID);
                     commandSender.sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(),
-                            target, lives));
+                            targetUser.getUser(), targetUser.getLives()));
 
                 } else {
 
-                    playerNotFound(commandSender, username);
+                    playerNotFound(commandSender, args[1]);
 
                 }
 

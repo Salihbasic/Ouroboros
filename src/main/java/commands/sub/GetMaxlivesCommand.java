@@ -28,8 +28,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sedexlives.LivesUser;
 import sedexlives.SedexLives;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 public class GetMaxlivesCommand extends AbstractSubCommand {
 
@@ -45,8 +46,8 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return ChatColor.RED + "/lives maxlives [player] " + ChatColor.WHITE + "- " + ChatColor.GREEN +
-                "Attempts to get maximum lives of a player. Only works for online players.\n";
+        return formatHelp("/lives maxlives [player]",
+                "Attempts to get maximum lives of a player. Only works for online players.");
     }
 
     @Override
@@ -67,9 +68,9 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
                 }
 
                 final Player playerSender = (Player) commandSender;
-                final int maxlives = getPlayerMaxLives(playerSender);
+                LivesUser user = new LivesUser(plugin, playerSender);
 
-                playerSender.sendMessage(ChatColor.GREEN + "You have a maximum of " + maxlives + " lives.");
+                playerSender.sendMessage(ChatColor.GREEN + "You have a maximum of " + user.getMaxLives() + " lives.");
 
             }
 
@@ -80,18 +81,17 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
                     return true;
                 }
 
-                final String username = args[1];
-                final Player target = plugin.getServer().getPlayer(username);
+                final Player target = plugin.getServer().getPlayer(args[1]);
+                LivesUser targetUser = new LivesUser(plugin, target);
 
-                if (target != null) { // Player found
+                if (targetUser.getUser() != null) { // Player found
 
-                    final int maxlives = getPlayerMaxLives(target);
-                    commandSender.sendMessage(target.getDisplayName() + ChatColor.GREEN +
-                            "has a maximum of " + maxlives + " lives.");
+                    commandSender.sendMessage(targetUser.getUser().getName() + ChatColor.GREEN +
+                            "has a maximum of " + targetUser.getMaxLives() + " lives.");
 
                 } else {
 
-                    playerNotFound(commandSender, username);
+                    playerNotFound(commandSender, args[1]);
 
                 }
 

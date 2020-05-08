@@ -21,9 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package database;
+package util;
 
-import sedexlives.ConfigManager;
 import sedexlives.SedexLives;
 
 import java.sql.*;

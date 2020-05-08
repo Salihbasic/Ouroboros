@@ -28,7 +28,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import sedexlives.SedexLivesPermissions;
+import util.SedexLivesPermissions;
 
 import java.util.HashMap;
 
