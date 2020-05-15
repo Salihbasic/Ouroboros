@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.hooks;
+package com.github.salihbasicm.sedexlives.hooks;
 
 import com.github.salihbasicm.sedexlives.LivesUser;
 import com.github.salihbasicm.sedexlives.SedexLives;

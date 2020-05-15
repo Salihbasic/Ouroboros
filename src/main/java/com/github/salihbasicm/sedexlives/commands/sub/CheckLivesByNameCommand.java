@@ -21,15 +21,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.commands.sub;
+package com.github.salihbasicm.sedexlives.commands.sub;
 
-import com.github.salihbasicm.commands.AbstractSubCommand;
+import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.github.salihbasicm.sedexlives.LivesUser;
 import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.util.SedexLivesPermissions;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class CheckLivesByNameCommand extends AbstractSubCommand {
 

@@ -1,4 +1,4 @@
-package com.github.salihbasicm.listeners;
+package com.github.salihbasicm.sedexlives.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

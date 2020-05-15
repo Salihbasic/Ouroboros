@@ -21,14 +21,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.commands;
+package com.github.salihbasicm.sedexlives.commands;
 
-import com.github.salihbasicm.commands.sub.*;
+import com.github.salihbasicm.sedexlives.commands.sub.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import com.github.salihbasicm.util.SedexLivesPermissions;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 import java.util.HashMap;
 
