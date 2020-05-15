@@ -1,11 +1,11 @@
-package sedexlives;
+package com.github.salihbasicm.sedexlives;
 
-import util.ConfigManager;
-import util.SQLManager;
+import com.github.salihbasicm.util.ConfigManager;
+import com.github.salihbasicm.util.SQLManager;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
-import util.SedexLivesPermissions;
+import com.github.salihbasicm.util.SedexLivesPermissions;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public class LivesUser {
     }
 
     /**
-     * Iteraters over {@link Player}'s permissions and attempts to find {@code 'sedexlives.maxlives.#'} permission.
+     * Iteraters over {@link Player}'s permissions and attempts to find {@code sedexlives.maxlives.#} permission.
      * It then splits this permission and attempts to return number in place of {@code '#'}. If there is no number there,
      * or if the player has no permission, it returns the default maximum lives.
      *

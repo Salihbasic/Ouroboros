@@ -21,19 +21,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package commands;
+package com.github.salihbasicm.commands;
 
-import commands.sub.*;
+import com.github.salihbasicm.commands.sub.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import util.SedexLivesPermissions;
+import com.github.salihbasicm.util.SedexLivesPermissions;
 
 import java.util.HashMap;
 
 /**
- * Manages all sub-commands used by SedexLives.
+ * Manages all commands used by SedexLives.
  * Sub-command is any argument immediately following {@code /lives} command.
  *
  */

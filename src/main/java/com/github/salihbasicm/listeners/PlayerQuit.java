@@ -1,10 +1,10 @@
-package listeners;
+package com.github.salihbasicm.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import sedexlives.LivesUser;
-import sedexlives.SedexLives;
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
 
 public class PlayerQuit implements Listener {
 

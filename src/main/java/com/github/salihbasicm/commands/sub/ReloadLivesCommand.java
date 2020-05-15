@@ -21,14 +21,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package commands.sub;
+package com.github.salihbasicm.commands.sub;
 
-import commands.AbstractSubCommand;
+import com.github.salihbasicm.commands.AbstractSubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import sedexlives.SedexLives;
-import util.SedexLivesPermissions;
+import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.util.SedexLivesPermissions;
 
 public class ReloadLivesCommand extends AbstractSubCommand {
 

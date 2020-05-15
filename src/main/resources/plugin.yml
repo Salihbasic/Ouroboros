@@ -1,6 +1,6 @@
 name: SedexLives
 version: ${project.version}
-main: sedexlives.SedexLives
+main: com.github.salihbasicm.sedexlives.SedexLives
 author: Steinein_
 description: Allows players to use lives in order to keep their inventory or XP.
 api-version: "1.15"

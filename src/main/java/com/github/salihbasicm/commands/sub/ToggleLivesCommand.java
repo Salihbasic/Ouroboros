@@ -1,13 +1,13 @@
-package commands.sub;
+package com.github.salihbasicm.commands.sub;
 
-import commands.AbstractSubCommand;
+import com.github.salihbasicm.commands.AbstractSubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import sedexlives.LivesUser;
-import sedexlives.SedexLives;
-import util.SedexLivesPermissions;
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.util.SedexLivesPermissions;
 
 public class ToggleLivesCommand extends AbstractSubCommand {
 

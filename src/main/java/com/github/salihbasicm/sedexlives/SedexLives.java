@@ -21,16 +21,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package sedexlives;
+package com.github.salihbasicm.sedexlives;
 
-import commands.CommandManager;
-import hooks.PlaceholderapiExpansion;
-import listeners.PlayerQuit;
+import com.github.salihbasicm.commands.CommandManager;
+import com.github.salihbasicm.hooks.PlaceholderapiExpansion;
+import com.github.salihbasicm.listeners.PlayerQuit;
 import org.bukkit.entity.Player;
-import util.ConfigManager;
-import util.SQLManager;
-import listeners.PlayerDeath;
-import listeners.PlayerJoin;
+import com.github.salihbasicm.util.ConfigManager;
+import com.github.salihbasicm.util.SQLManager;
+import com.github.salihbasicm.listeners.PlayerDeath;
+import com.github.salihbasicm.listeners.PlayerJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -63,7 +63,7 @@ public class SedexLives extends JavaPlugin {
             new PlaceholderapiExpansion().register();
             this.getLogger().info("Successfully hooked into PlaceholderAPI.");
         } else {
-            this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholder may not work!");
+            this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholders may not work!");
         }
 
         registerListeners();

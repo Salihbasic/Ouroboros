@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package commands;
+package com.github.salihbasicm.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

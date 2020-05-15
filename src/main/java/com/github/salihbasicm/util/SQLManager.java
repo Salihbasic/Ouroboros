@@ -21,9 +21,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package util;
+package com.github.salihbasicm.util;
 
-import sedexlives.SedexLives;
+import com.github.salihbasicm.sedexlives.SedexLives;
 
 import java.sql.*;
 import java.util.concurrent.CompletableFuture;

@@ -21,14 +21,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package listeners;
+package com.github.salihbasicm.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import sedexlives.LivesUser;
-import sedexlives.SedexLives;
-import util.SedexLivesPermissions;
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.util.SedexLivesPermissions;
 
 public class PlayerJoin implements Listener {
 

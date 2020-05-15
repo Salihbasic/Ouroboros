@@ -21,10 +21,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package hooks;
+package com.github.salihbasicm.hooks;
 
-import sedexlives.LivesUser;
-import sedexlives.SedexLives;
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -47,7 +47,7 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "sedexlives";
+        return "com/github/salihbasicm/sedexlives";
     }
 
     @Override
