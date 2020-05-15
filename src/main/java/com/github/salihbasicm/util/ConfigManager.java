@@ -29,6 +29,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 /**
  * Abstraction layer over the actual {@link FileConfiguration} used for the default config.
  */
@@ -96,7 +98,8 @@ public class ConfigManager {
      * @return Prepared lives message ready for further use
      */
     public String getLivesMessage(boolean papiHooked, LivesUser user) {
-        final String livesMessageInConfig = configuration.getString(LIVES_MESSAGE_PATH);
+        final String livesMessageInConfig = Objects.requireNonNull(configuration.getString(LIVES_MESSAGE_PATH),
+                                                            "livesMessage is null!");
 
         if (papiHooked)
             return PlaceholderAPI.setPlaceholders(user.getUser(), livesMessageInConfig);
