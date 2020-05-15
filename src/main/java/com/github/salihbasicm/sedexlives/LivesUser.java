@@ -1,13 +1,12 @@
 package com.github.salihbasicm.sedexlives;
 
-import com.github.salihbasicm.util.ConfigManager;
-import com.github.salihbasicm.util.SQLManager;
+import com.github.salihbasicm.sedexlives.util.ConfigManager;
+import com.github.salihbasicm.sedexlives.util.SQLManager;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
-import com.github.salihbasicm.util.SedexLivesPermissions;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class LivesUser {
@@ -18,7 +17,6 @@ public class LivesUser {
 
     private Player user;
     private String uuid;
-    private HashMap<Player, Boolean> toggledOff;
 
     public LivesUser(SedexLives plugin, Player user) {
         this.plugin = plugin;
@@ -26,8 +24,6 @@ public class LivesUser {
         this.user = Objects.requireNonNull(user, "Player could not be found!");
 
         uuid = user.getUniqueId().toString();
-
-        toggledOff = plugin.getToggledOff();
 
         sqlManager = plugin.getSqlManager();
         this.configManager = plugin.getConfigManager();
@@ -114,10 +110,7 @@ public class LivesUser {
      * @return {@code true} if player's lives are toggled off
      */
     public boolean isToggledOff() {
-        if (toggledOff.containsKey(this.user))
-            return toggledOff.get(this.user);
-
-        return false;
+        return this.plugin.getToggledOff().contains(this);
     }
 
     /**
@@ -129,13 +122,23 @@ public class LivesUser {
 
         if (value) {
 
-            if (!isToggledOff())
-                toggledOff.put(this.user, true);
+            if (!this.plugin.getToggledOff().contains(this)) {
+
+                this.plugin.debugMessage("Attempting to toggle off lives for user.");
+                this.plugin.getToggledOff().add(this);
+                this.plugin.debugMessage("Successfully toggled off user's lives.");
+
+            } else {
+
+                this.plugin.debugMessage("User already has their lives toggled off");
+
+            }
 
         } else {
 
-            if (isToggledOff())
-                toggledOff.remove(this.user);
+            this.plugin.debugMessage("Attempting to toggle on lives for user.");
+            this.plugin.getToggledOff().remove(this);
+            this.plugin.debugMessage("Successfully toggled on user's lives.");
 
         }
 

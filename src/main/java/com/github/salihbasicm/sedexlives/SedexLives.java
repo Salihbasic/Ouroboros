@@ -23,18 +23,18 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives;
 
-import com.github.salihbasicm.commands.CommandManager;
-import com.github.salihbasicm.hooks.PlaceholderapiExpansion;
-import com.github.salihbasicm.listeners.PlayerQuit;
-import org.bukkit.entity.Player;
-import com.github.salihbasicm.util.ConfigManager;
-import com.github.salihbasicm.util.SQLManager;
-import com.github.salihbasicm.listeners.PlayerDeath;
-import com.github.salihbasicm.listeners.PlayerJoin;
+import com.github.salihbasicm.sedexlives.commands.CommandManager;
+import com.github.salihbasicm.sedexlives.hooks.PlaceholderapiExpansion;
+import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
+import com.github.salihbasicm.sedexlives.util.ConfigManager;
+import com.github.salihbasicm.sedexlives.util.SQLManager;
+import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
+import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -46,7 +46,7 @@ public class SedexLives extends JavaPlugin {
 
     private boolean papiHooked = false;
 
-    private HashMap<Player, Boolean> toggledOff;
+    private List<LivesUser> toggledOff;
 
     @Override
     public void onEnable() {
@@ -71,7 +71,7 @@ public class SedexLives extends JavaPlugin {
         CommandManager commandManager = new CommandManager();
         Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(commandManager);
 
-        toggledOff = new HashMap<>();
+        toggledOff = new ArrayList<>();
 
     }
 
@@ -134,7 +134,7 @@ public class SedexLives extends JavaPlugin {
      *
      * @return HashMap of all players with toggled of lives
      */
-    public HashMap<Player, Boolean> getToggledOff() {
+    public List<LivesUser> getToggledOff() {
         return toggledOff;
     }
 
