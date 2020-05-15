@@ -33,6 +33,46 @@ public class LivesUser {
         this.configManager = plugin.getConfigManager();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null)
+            return false;
+
+        if (!(obj instanceof LivesUser))
+            return false;
+
+        LivesUser other = (LivesUser) obj;
+
+        for (int i = 0; i < getSignificantFields().length; i++) {
+
+            if (!Objects.equals(this.getSignificantFields()[i], ((LivesUser) obj).getSignificantFields()[i]))
+                return false;
+
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSignificantFields());
+    }
+
+    @Override
+    public String toString() {
+        return "[Name: " + this.user.getName() + ", UUID: " + this.uuid + "]";
+    }
+
+    /*
+    Returns fields which are used for comparing two LivesUser objects.
+     */
+    private Object[] getSignificantFields() {
+        return new Object[] {
+                uuid, user
+        };
+    }
+
     /**
      * Gets the lives of this particular user.
      *
