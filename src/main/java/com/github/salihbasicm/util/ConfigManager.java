@@ -23,6 +23,7 @@ SOFTWARE.
 
 package com.github.salihbasicm.util;
 
+import com.github.salihbasicm.sedexlives.LivesUser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -91,18 +92,18 @@ public class ConfigManager {
      * If the PlaceholderAPI is not installed, it will only change the placeholders for %sedex_lives%.
      *
      * @param papiHooked Is the plugin hooked into PlaceholderAPI
-     * @param player Player whom the placeholders refer to
-     * @param lives Lives the player has
+     * @param user User of the lives system
      * @return Prepared lives message ready for further use
      */
-    public String getLivesMessage(boolean papiHooked, Player player, int lives) {
+    public String getLivesMessage(boolean papiHooked, LivesUser user) {
         final String livesMessageInConfig = configuration.getString(LIVES_MESSAGE_PATH);
 
         if (papiHooked)
-            return PlaceholderAPI.setPlaceholders(player, livesMessageInConfig);
+            return PlaceholderAPI.setPlaceholders(user.getUser(), livesMessageInConfig);
         else
             return ChatColor.translateAlternateColorCodes('&',
-                    livesMessageInConfig.replaceAll("%sedexlives_lives%", String.valueOf(lives)));
+                    livesMessageInConfig.replaceAll("%sedexlives_lives%", String.valueOf(user.getLives())))
+                    .replaceAll("%sedexlives_maxlives%", String.valueOf(user.getMaxLives()));
     }
 
 }

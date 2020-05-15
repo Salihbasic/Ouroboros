@@ -69,8 +69,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 LivesUser user = new LivesUser(plugin, playerSender);
 
-                user.getUser().sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(),
-                        user.getUser(), user.getLives()));
+                user.getUser().sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(), user));
 
             }
 
@@ -87,7 +86,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 if (targetUser.getUser() != null) {
 
                     commandSender.sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(),
-                            targetUser.getUser(), targetUser.getLives()));
+                                                                                        targetUser));
 
                 } else {
 
