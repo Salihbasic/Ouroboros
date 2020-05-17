@@ -68,11 +68,15 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
         LivesUser user = new LivesUser(plugin, player);
 
-        if (identifier.equals("lives"))
-            return String.valueOf(user.getLives());
 
-        if (identifier.equals("maxlives"))
-            return String.valueOf(user.getMaxLives());
+        switch (identifier) {
+
+            case "lives":
+                return String.valueOf(user.getLives());
+            case "maxlives":
+                return String.valueOf(user.getMaxLives());
+
+        }
 
         return null;
     }
