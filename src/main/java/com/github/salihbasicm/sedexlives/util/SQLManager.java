@@ -28,6 +28,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.*;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -173,7 +174,7 @@ public class SQLManager {
      * @param uuid Player's UUID
      * @return {@link CompletableFuture} with the query result if successful or with {@code -1} if not
      */
-    private CompletableFuture<Integer> getPlayerLivesAsync(final String uuid) {
+    private CompletableFuture<Integer> getPlayerLivesAsync(final UUID uuid) {
 
         return CompletableFuture.supplyAsync(() -> {
 
@@ -209,7 +210,7 @@ public class SQLManager {
     /*
     Wrapper method for getPlayerLives(final String uuid) method above. Unwraps the completable future.
      */
-    public int getPlayerLives(final String uuid) {
+    public int getPlayerLives(final UUID uuid) {
         try {
             return getPlayerLivesAsync(uuid).get();
         } catch (InterruptedException | ExecutionException e) {

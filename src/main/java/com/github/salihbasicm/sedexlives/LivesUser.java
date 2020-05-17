@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class LivesUser {
 
@@ -16,14 +17,14 @@ public class LivesUser {
     private ConfigManager configManager;
 
     private Player user;
-    private String uuid;
+    private UUID uuid;
 
     public LivesUser(SedexLives plugin, Player user) {
         this.plugin = plugin;
 
         this.user = Objects.requireNonNull(user, "Player could not be found!");
 
-        uuid = user.getUniqueId().toString();
+        uuid = user.getUniqueId();
 
         sqlManager = plugin.getSqlManager();
         this.configManager = plugin.getConfigManager();
