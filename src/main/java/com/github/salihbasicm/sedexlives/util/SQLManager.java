@@ -24,6 +24,8 @@ SOFTWARE.
 package com.github.salihbasicm.sedexlives.util;
 
 import com.github.salihbasicm.sedexlives.SedexLives;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.*;
 import java.util.concurrent.CompletableFuture;
@@ -39,6 +41,8 @@ public class SQLManager {
     private String username;
     private String password;
     private String database;
+
+    private HikariDataSource dataSource;
 
     private SQLManager(final String hostname, final String port, final String username,
                        final String password, final String database) {
@@ -68,40 +72,40 @@ public class SQLManager {
         return sqlManager;
     }
 
-    /*
-    Attempts to close whatever is passed in parameters.
+    /**
+     * Attempts to open a new Hikari data source.
      */
-    private void closeEverything(Connection connection, PreparedStatement statement, ResultSet resultSet) {
+    private void connect() {
 
-        if (connection != null) {
-            try {
-                plugin.debugMessage("Attempting to close database connection.");
-                connection.close();
-                plugin.debugMessage("Successfully closed database connection.");
-            } catch (SQLException e) {
-                plugin.debugMessage("Failed while attempting to close database connection.");
-            }
+        final String jdbcUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;
+
+        HikariConfig config = new HikariConfig();
+
+        config.setPoolName("sedexrewards-hikari");
+        config.setJdbcUrl(jdbcUrl);
+        config.setUsername(this.username);
+        config.setPassword(this.password);
+
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", "true");
+        config.addDataSourceProperty("rewriteBatchedStatements", "true");
+        config.addDataSourceProperty("maintainTimeStats", "false");
+
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(10);
+        config.setIdleTimeout(300000);
+        config.setMaxLifetime(600000);
+        config.setConnectionTimeout(5000);
+        config.setInitializationFailTimeout(-1);
+
+        try {
+            this.dataSource = new HikariDataSource(config);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (statement != null) {
-            try {
-                plugin.debugMessage("Attempting to close statement.");
-                statement.close();
-                plugin.debugMessage("Successfully closed statement.");
-            } catch (SQLException e) {
-                plugin.debugMessage("Failed while attempting to close statement.");
-            }
-        }
-
-        if (resultSet != null) {
-            try {
-                plugin.debugMessage("Attempting to close result set.");
-                resultSet.close();
-                plugin.debugMessage("Successfully closed result set.");
-            } catch (SQLException e) {
-                plugin.debugMessage("Failed while attempting to close result set.");
-            }
-        }
     }
 
     /**
@@ -111,14 +115,9 @@ public class SQLManager {
      */
     public void update(final String sql) {
 
-        PreparedStatement statement = null;
+        try (Connection connection = this.getConnection()) {
 
-        try {
-            Connection connection = this.getConnection();
-
-            assert connection != null;
-
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
 
             plugin.debugMessage("Preparing statement for update.");
             statement.executeUpdate();
@@ -127,8 +126,6 @@ public class SQLManager {
         } catch (SQLException e) {
             plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
             e.printStackTrace();
-        } finally {
-            this.closeEverything(null, statement, null);
         }
 
     }
@@ -141,26 +138,21 @@ public class SQLManager {
      */
     public ResultSet query(final String sql) {
 
-        PreparedStatement statement;
-        ResultSet resultSet = null;
+        try (Connection connection = this.getConnection()){
 
-        try {
-            Connection connection = this.getConnection();
-
-            assert connection != null;
-
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
 
             plugin.debugMessage("Preparing statement for query.");
-            resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
             plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
 
+            return resultSet;
         } catch (SQLException e) {
             plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
             e.printStackTrace();
-        }
 
-        return resultSet;
+            return null;
+        }
     }
 
     /**
@@ -168,21 +160,8 @@ public class SQLManager {
      *
      * @return {@link Connection} if connection was successful, {@code null} otherwise
      */
-    public Connection getConnection() {
-        final String connStr = "jdbc:mysql://" + hostname + ":" + port + "/" + database + "?user=" + username + "&password=" +
-                password;
-
-        try {
-
-            Class.forName("com.mysql.jdbc.Driver");
-            return DriverManager.getConnection(connStr);
-
-        } catch (ClassNotFoundException | SQLException e) {
-            plugin.debugMessage("Error while attempting to open database connection.");
-            e.printStackTrace();
-        }
-
-        return null;
+    public Connection getConnection() throws SQLException {
+        return this.dataSource.getConnection();
     }
 
     /**
@@ -243,6 +222,8 @@ public class SQLManager {
      * Creates the main table if it does not exist.
      */
     public void setUpTable() {
+        this.connect();
+
         plugin.debugMessage("Attempting to set up tables if they do not exist.");
         final String update = "CREATE TABLE IF NOT EXISTS sl_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
         this.update(update);
