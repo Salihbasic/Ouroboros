@@ -47,7 +47,7 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "com/github/salihbasicm/sedexlives";
+        return "sedexlives";
     }
 
     @Override
@@ -68,11 +68,10 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
         LivesUser user = new LivesUser(plugin, player);
 
-
         switch (identifier) {
 
             case "lives":
-                return String.valueOf(user.getLives());
+                return String.valueOf(plugin.getLivesUserCache().get(user));
             case "maxlives":
                 return String.valueOf(user.getMaxLives());
 

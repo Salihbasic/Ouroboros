@@ -167,6 +167,8 @@ public class LivesUser {
             public void run() {
                 final String sql = "UPDATE sl_lives SET lives = " + newValue + " WHERE uuid = '" + uuid + "';";
                 sqlManager.update(sql);
+
+                plugin.getLivesUserCache().refresh(LivesUser.this);
             }
 
         }.runTaskAsynchronously(plugin);

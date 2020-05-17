@@ -23,10 +23,12 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives;
 
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.salihbasicm.sedexlives.commands.CommandManager;
 import com.github.salihbasicm.sedexlives.hooks.PlaceholderapiExpansion;
 import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
 import com.github.salihbasicm.sedexlives.util.ConfigManager;
+import com.github.salihbasicm.sedexlives.util.LivesUserCache;
 import com.github.salihbasicm.sedexlives.util.SQLManager;
 import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
 import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
@@ -43,6 +45,7 @@ public class SedexLives extends JavaPlugin {
     private static SedexLives plugin = null;
     private ConfigManager configManager = null;
     private SQLManager sqlManager = null;
+    private LivesUserCache livesUserCache = null;
 
     private boolean papiHooked = false;
 
@@ -65,6 +68,8 @@ public class SedexLives extends JavaPlugin {
         } else {
             this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholders may not work!");
         }
+
+        livesUserCache = new LivesUserCache();
 
         registerListeners();
 
@@ -145,6 +150,10 @@ public class SedexLives extends JavaPlugin {
      */
     public boolean isPapiHooked() {
         return papiHooked;
+    }
+
+    public LoadingCache<LivesUser, Integer> getLivesUserCache() {
+        return livesUserCache.getLivesCache();
     }
 
 }
