@@ -6,7 +6,7 @@
 
     <groupId>com.sedexcraft</groupId>
     <artifactId>SedexLives</artifactId>
-    <version>0.2.3-SNAPSHOT</version>
+    <version>0.2.4-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
