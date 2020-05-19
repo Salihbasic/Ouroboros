@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LivesUserCache {
 
-    private LoadingCache<LivesUser, Integer> livesCache;
+    private final LoadingCache<LivesUser, Integer> livesCache;
 
     public LivesUserCache() {
 

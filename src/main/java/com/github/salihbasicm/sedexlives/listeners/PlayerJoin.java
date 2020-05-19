@@ -32,7 +32,7 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class PlayerJoin implements Listener {
 
-    private SedexLives plugin;
+    private final SedexLives plugin;
 
     public PlayerJoin(SedexLives plugin) {
         this.plugin = plugin;

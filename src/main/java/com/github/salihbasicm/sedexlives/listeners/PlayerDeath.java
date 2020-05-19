@@ -32,7 +32,7 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class PlayerDeath implements Listener {
 
-    private SedexLives plugin;
+    private final SedexLives plugin;
 
     public PlayerDeath(SedexLives plugin) {
         this.plugin = plugin;

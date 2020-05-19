@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 public class ConfigManager {
 
-    private FileConfiguration configuration;
+    private final FileConfiguration configuration;
 
     // Config paths
 

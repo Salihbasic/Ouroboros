@@ -35,11 +35,11 @@ import java.util.concurrent.ExecutionException;
 public class SQLManager {
     private static SQLManager sqlManager = null;
 
-    private String hostname;
-    private String port;
-    private String username;
-    private String password;
-    private String database;
+    private final String hostname;
+    private final String port;
+    private final String username;
+    private final String password;
+    private final String database;
 
     private HikariDataSource dataSource;
 

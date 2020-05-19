@@ -33,7 +33,7 @@ Do not touch. Expansion for PlaceholderAPI that adds custom plugin placeholder.
  */
 public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
-    private SedexLives plugin;
+    private final SedexLives plugin;
 
     public PlaceholderapiExpansion(SedexLives plugin) {
         this.plugin = plugin;
@@ -70,7 +70,7 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
         if (player == null)
             return "";
 
-        LivesUser user = new LivesUser(plugin, player);
+        final LivesUser user = new LivesUser(plugin, player);
 
         switch (identifier) {
 

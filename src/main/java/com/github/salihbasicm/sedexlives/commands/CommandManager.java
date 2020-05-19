@@ -69,6 +69,8 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
 
+        this.plugin.debugMessage("Attempting to execute command: " + command.toString());
+
         if (label.equalsIgnoreCase("lives")) {
 
             if (hasNoPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
