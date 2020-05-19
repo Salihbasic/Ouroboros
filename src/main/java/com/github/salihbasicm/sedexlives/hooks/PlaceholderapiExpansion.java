@@ -33,7 +33,11 @@ Do not touch. Expansion for PlaceholderAPI that adds custom plugin placeholder.
  */
 public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+    private SedexLives plugin;
+
+    public PlaceholderapiExpansion(SedexLives plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean persist() {

@@ -23,6 +23,7 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.commands;
 
+import com.github.salihbasicm.sedexlives.SedexLives;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +33,12 @@ import org.bukkit.command.CommandSender;
  * Represents an abstract SedexLives sub-command.
  */
 public abstract class AbstractSubCommand implements CommandExecutor  {
+
+    protected SedexLives plugin;
+
+    public AbstractSubCommand(SedexLives plugin) {
+        this.plugin = plugin;
+    }
 
     /*
 

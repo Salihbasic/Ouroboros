@@ -26,12 +26,12 @@ package com.github.salihbasicm.sedexlives;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.salihbasicm.sedexlives.commands.CommandManager;
 import com.github.salihbasicm.sedexlives.hooks.PlaceholderapiExpansion;
+import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
+import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
 import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
 import com.github.salihbasicm.sedexlives.util.ConfigManager;
 import com.github.salihbasicm.sedexlives.util.LivesUserCache;
 import com.github.salihbasicm.sedexlives.util.SQLManager;
-import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
-import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,10 +42,9 @@ import java.util.logging.Level;
 
 public class SedexLives extends JavaPlugin {
 
-    private static SedexLives plugin = null;
-    private ConfigManager configManager = null;
-    private SQLManager sqlManager = null;
-    private LivesUserCache livesUserCache = null;
+    private ConfigManager configManager;
+    private SQLManager sqlManager;
+    private LivesUserCache livesUserCache;
 
     private boolean papiHooked = false;
 
@@ -53,7 +52,6 @@ public class SedexLives extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        plugin = this;
         this.saveDefaultConfig();
 
         configManager = new ConfigManager(this.getConfig());
@@ -61,19 +59,13 @@ public class SedexLives extends JavaPlugin {
 
         sqlManager.setUpTable(); // If the table does not exist, it gets created. Nothing happens otherwise.
 
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            papiHooked = true;
-            new PlaceholderapiExpansion().register();
-            this.getLogger().info("Successfully hooked into PlaceholderAPI.");
-        } else {
-            this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholders may not work!");
-        }
-
         livesUserCache = new LivesUserCache();
+
+        hookIntoPlaceholderAPI();
 
         registerListeners();
 
-        CommandManager commandManager = new CommandManager();
+        CommandManager commandManager = new CommandManager(this);
         Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(commandManager);
 
         toggledOff = new ArrayList<>();
@@ -81,9 +73,25 @@ public class SedexLives extends JavaPlugin {
     }
 
     private void registerListeners() {
-        this.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
+    }
+
+    private void hookIntoPlaceholderAPI() {
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+
+            papiHooked = true;
+            new PlaceholderapiExpansion(this).register();
+            this.getLogger().info("Successfully hooked into PlaceholderAPI.");
+
+        } else {
+
+            this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholders may not work!");
+
+        }
+
     }
 
     /*
@@ -103,17 +111,8 @@ public class SedexLives extends JavaPlugin {
     public void debugMessage(String message) {
 
         if (getConfigManager().debugEnabled())
-            plugin.getLogger().log(Level.INFO, "[DEBUG]: " + message);
+            this.getLogger().log(Level.INFO, "[DEBUG]: " + message);
 
-    }
-
-    /**
-     * This plugin's instance.
-     *
-     * @return Plugin instance
-     */
-    public static SedexLives getSedexLives() {
-        return plugin;
     }
 
     /**

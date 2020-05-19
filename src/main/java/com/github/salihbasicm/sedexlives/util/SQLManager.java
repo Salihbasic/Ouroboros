@@ -35,8 +35,6 @@ import java.util.concurrent.ExecutionException;
 public class SQLManager {
     private static SQLManager sqlManager = null;
 
-    private SedexLives plugin = SedexLives.getSedexLives();
-
     private String hostname;
     private String port;
     private String username;
@@ -120,12 +118,9 @@ public class SQLManager {
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            plugin.debugMessage("Preparing statement for update.");
             statement.executeUpdate();
-            plugin.debugMessage("Successfully executed update statement. (" + sql + ")");
 
         } catch (SQLException e) {
-            plugin.debugMessage("Error while attempting to execute update statement. (" + sql + ")");
             e.printStackTrace();
         }
 
@@ -143,13 +138,8 @@ public class SQLManager {
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            plugin.debugMessage("Preparing statement for query.");
-            ResultSet resultSet = statement.executeQuery(sql);
-            plugin.debugMessage("Successfully executed query statement. (" + sql + ")");
-
-            return resultSet;
+            return statement.executeQuery(sql);
         } catch (SQLException e) {
-            plugin.debugMessage("Error while attempting to execute query statement. (" + sql + ")");
             e.printStackTrace();
 
             return null;
@@ -180,25 +170,19 @@ public class SQLManager {
 
             int lives = -1;
 
-            plugin.debugMessage("Attempting to get player lives for UUID (" + uuid + ")");
             final String query = "SELECT * FROM sl_lives WHERE uuid='" + uuid + "'";
 
             try (ResultSet resultSet = this.query(query)) {
 
-                if (resultSet == null) {
-                    plugin.debugMessage("Query failed. ResultSet is null.");
+                if (resultSet == null)
                     return lives;
-                }
 
                 if (resultSet.next()) { // Either empty or contains value
-                    plugin.debugMessage("Received ResultSet. Attempting to get lives.");
                     lives = resultSet.getInt("lives");
-                    plugin.debugMessage("Retrieved lives from ResultSet. Lives value (" + lives + ")");
                     resultSet.close();
                 }
 
             } catch (SQLException e) {
-                plugin.debugMessage("Failed to retrieve player lives for UUID (" + uuid + ")");
                 e.printStackTrace();
             }
 
@@ -225,7 +209,6 @@ public class SQLManager {
     public void setUpTable() {
         this.connect();
 
-        plugin.debugMessage("Attempting to set up tables if they do not exist.");
         final String update = "CREATE TABLE IF NOT EXISTS sl_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
         this.update(update);
     }

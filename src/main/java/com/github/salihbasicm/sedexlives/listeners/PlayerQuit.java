@@ -8,7 +8,11 @@ import com.github.salihbasicm.sedexlives.SedexLives;
 
 public class PlayerQuit implements Listener {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+    private SedexLives plugin;
+
+    public PlayerQuit(SedexLives plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {

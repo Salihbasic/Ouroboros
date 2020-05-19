@@ -34,7 +34,10 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class GetMaxlivesCommand extends AbstractSubCommand {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+
+    public GetMaxlivesCommand(SedexLives lives) {
+        super(lives);
+    }
 
     /*
     Defines the sub-command "maxlives" used to get the maximum lives a player can have.

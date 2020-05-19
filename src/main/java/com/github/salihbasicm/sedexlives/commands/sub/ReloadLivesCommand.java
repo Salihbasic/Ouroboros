@@ -32,7 +32,10 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class ReloadLivesCommand extends AbstractSubCommand {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+
+    public ReloadLivesCommand(SedexLives lives) {
+        super(lives);
+    }
 
     /*
     Defines the sub-command "reload" used to reload the config.

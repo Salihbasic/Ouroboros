@@ -34,7 +34,9 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class SetLivesByNameCommand extends AbstractSubCommand {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+    public SetLivesByNameCommand(SedexLives lives) {
+        super(lives);
+    }
 
     /*
     Defines the sub-command "set" used to set the value of lives.

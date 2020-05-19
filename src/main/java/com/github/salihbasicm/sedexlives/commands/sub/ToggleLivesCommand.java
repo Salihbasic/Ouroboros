@@ -11,7 +11,9 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class ToggleLivesCommand extends AbstractSubCommand {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+    public ToggleLivesCommand(SedexLives lives) {
+        super(lives);
+    }
 
     /*
     Defines the sub-command "toggle" used to toggle user's lives system.

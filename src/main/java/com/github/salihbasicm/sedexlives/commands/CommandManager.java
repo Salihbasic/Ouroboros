@@ -23,6 +23,7 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.commands;
 
+import com.github.salihbasicm.sedexlives.SedexLives;
 import com.github.salihbasicm.sedexlives.commands.sub.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -41,13 +42,15 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
 
     private HashMap<String, AbstractSubCommand> subCommands = new HashMap<>();
 
-    public CommandManager() {
-        subCommands.put("reload", new ReloadLivesCommand());
-        subCommands.put("info", new PluginInfoCommand());
-        subCommands.put("check", new CheckLivesByNameCommand());
-        subCommands.put("maxlives", new GetMaxlivesCommand());
-        subCommands.put("set", new SetLivesByNameCommand());
-        subCommands.put("toggle", new ToggleLivesCommand());
+    public CommandManager(SedexLives plugin) {
+        super(plugin);
+
+        subCommands.put("reload", new ReloadLivesCommand(plugin));
+        subCommands.put("info", new PluginInfoCommand(plugin));
+        subCommands.put("check", new CheckLivesByNameCommand(plugin));
+        subCommands.put("maxlives", new GetMaxlivesCommand(plugin));
+        subCommands.put("set", new SetLivesByNameCommand(plugin));
+        subCommands.put("toggle", new ToggleLivesCommand(plugin));
     }
 
 

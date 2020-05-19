@@ -32,7 +32,11 @@ import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class PlayerJoin implements Listener {
 
-    private SedexLives plugin = SedexLives.getSedexLives();
+    private SedexLives plugin;
+
+    public PlayerJoin(SedexLives plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
