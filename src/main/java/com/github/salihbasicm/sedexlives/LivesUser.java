@@ -12,12 +12,12 @@ import java.util.UUID;
 
 public class LivesUser {
 
-    private SedexLives plugin;
-    private SQLManager sqlManager;
-    private ConfigManager configManager;
+    private final SedexLives plugin;
+    private final SQLManager sqlManager;
+    private final ConfigManager configManager;
 
-    private Player user;
-    private UUID uuid;
+    private final Player user;
+    private final UUID uuid;
 
     public LivesUser(SedexLives plugin, Player user) {
         this.plugin = plugin;
