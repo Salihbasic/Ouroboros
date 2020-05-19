@@ -24,9 +24,9 @@ public class LivesUser {
 
         this.user = Objects.requireNonNull(user, "Player could not be found!");
 
-        uuid = user.getUniqueId();
+        this.uuid = user.getUniqueId();
 
-        sqlManager = plugin.getSqlManager();
+        this.sqlManager = plugin.getSqlManager();
         this.configManager = plugin.getConfigManager();
     }
 
@@ -74,7 +74,11 @@ public class LivesUser {
      * @return Number of lives
      */
     public int getLives() {
-        return sqlManager.getPlayerLives(uuid);
+        this.plugin.debugMessage("Attempting to retrieve lives for UUID[ " + this.uuid + "] ...");
+        int lives = this.sqlManager.getPlayerLives(this.uuid);
+        this.plugin.debugMessage("Retrieved lives for UUID[" + this.uuid + "] with value[" + lives + "]!");
+
+        return lives;
     }
 
     /**
@@ -86,6 +90,8 @@ public class LivesUser {
      */
     public int getMaxLives() {
 
+        this.plugin.debugMessage("Attempting to retrieve maximum lives for UUID[" + this.uuid + "] ...");
+
         for (PermissionAttachmentInfo perm : user.getEffectivePermissions()) {
 
             if (perm.getPermission().startsWith(SedexLivesPermissions.MAXLIVES_NUMBER)) {
@@ -93,7 +99,11 @@ public class LivesUser {
                 String[] split = perm.getPermission().split("\\.");
 
                 if (split.length >= 3) {
-                    return Integer.parseInt(split[2]);
+                    final int max = Integer.parseInt(split[2]);
+
+                    this.plugin.debugMessage("Retrieved maimum lives for UUID[" + this.uuid + "] with value[" + max + "]!");
+
+                    return max;
                 }
 
             }
@@ -123,21 +133,21 @@ public class LivesUser {
 
             if (!this.plugin.getToggledOff().contains(this)) {
 
-                this.plugin.debugMessage("Attempting to toggle off lives for user.");
+                this.plugin.debugMessage("Attempting to toggle off lives for UUID[" + this.uuid + "] ...");
                 this.plugin.getToggledOff().add(this);
-                this.plugin.debugMessage("Successfully toggled off user's lives.");
+                this.plugin.debugMessage("Successfully toggled off lives for UUID[" + this.uuid + "]!");
 
             } else {
 
-                this.plugin.debugMessage("User already has their lives toggled off");
+                this.plugin.debugMessage("UUID[" + this.uuid + "] already has lives toggled off!");
 
             }
 
         } else {
 
-            this.plugin.debugMessage("Attempting to toggle on lives for user.");
+            this.plugin.debugMessage("Attempting to toggle on lives for UUID[" + this.uuid + "] ...");
             this.plugin.getToggledOff().remove(this);
-            this.plugin.debugMessage("Successfully toggled on user's lives.");
+            this.plugin.debugMessage("Successfully toggled on lives for UUID[" + this.uuid + "]!");
 
         }
 
