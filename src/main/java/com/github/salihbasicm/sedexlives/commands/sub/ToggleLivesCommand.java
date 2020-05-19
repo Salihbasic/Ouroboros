@@ -36,8 +36,7 @@ public class ToggleLivesCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("toggle")) {
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.TOGLE_LIVES)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.TOGLE_LIVES)) {
                 return true;
             }
 

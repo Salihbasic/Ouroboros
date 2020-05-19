@@ -60,8 +60,7 @@ public class PluginInfoCommand extends AbstractSubCommand {
                 return true;
             }
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
                 return true;
             }
 

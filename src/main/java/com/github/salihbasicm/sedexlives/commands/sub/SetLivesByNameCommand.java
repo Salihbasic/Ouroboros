@@ -65,8 +65,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("set")) {
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.SET_LIVES)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.SET_LIVES)) {
                 return true;
             }
 

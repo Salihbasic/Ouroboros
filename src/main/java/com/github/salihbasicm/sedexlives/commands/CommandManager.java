@@ -71,8 +71,7 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
 
         if (label.equalsIgnoreCase("lives")) {
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
                 return true;
             }
 

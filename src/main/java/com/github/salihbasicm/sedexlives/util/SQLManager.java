@@ -80,7 +80,7 @@ public class SQLManager {
 
         HikariConfig config = new HikariConfig();
 
-        config.setPoolName("sedexrewards-hikari");
+        config.setPoolName("sedexlives-hikari");
         config.setJdbcUrl(jdbcUrl);
         config.setUsername(this.username);
         config.setPassword(this.password);

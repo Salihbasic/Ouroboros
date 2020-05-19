@@ -57,8 +57,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("check")) {
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.CHECK_LIVES)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.CHECK_LIVES)) {
                 return true;
             }
 
@@ -78,8 +77,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
             if (args.length == 2) { // Executed /lives get <player name>
 
-                if (!hasPermission(commandSender, SedexLivesPermissions.CHECK_LIVES_OTHERS)) {
-                    noPermissionMessage(commandSender);
+                if (hasNoPermission(commandSender, SedexLivesPermissions.CHECK_LIVES_OTHERS)) {
                     return true;
                 }
 

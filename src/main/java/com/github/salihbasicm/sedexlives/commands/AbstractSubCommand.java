@@ -77,8 +77,13 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     /*
     Additional abstraction to check for permissions.
      */
-    public boolean hasPermission(CommandSender sender, String permission) {
-        return sender.hasPermission(permission);
+    public boolean hasNoPermission(CommandSender sender, String permission) {
+        if (!sender.hasPermission(permission)) {
+            noPermissionMessage(sender);
+            return false;
+        }
+
+        return true;
     }
 
     /*
@@ -92,7 +97,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     Message sent if the player is not found.
      */
     public void playerNotFound(CommandSender sender, String username) {
-        sender.sendMessage(ChatColor.RED + "Could not find player " + username + "!");
+        sender.sendMessage(ChatColor.RED + "Could not find player: " + username + "!");
     }
 
     /*

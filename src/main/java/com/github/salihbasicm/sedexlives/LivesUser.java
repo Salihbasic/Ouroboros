@@ -39,8 +39,6 @@ public class LivesUser {
         if (!(obj instanceof LivesUser))
             return false;
 
-        LivesUser other = (LivesUser) obj;
-
         for (int i = 0; i < getSignificantFields().length; i++) {
 
             if (!Objects.equals(this.getSignificantFields()[i], ((LivesUser) obj).getSignificantFields()[i]))

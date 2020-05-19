@@ -58,8 +58,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("maxlives")) {
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.CHECK_MAXLIVES)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.CHECK_MAXLIVES)) {
                 return true;
             }
 
@@ -79,8 +78,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
 
             if (args.length == 2) { // Executed /lives maxlives <player>
 
-                if (!hasPermission(commandSender, SedexLivesPermissions.CHECK_MAXLIVES_OTHERS)) {
-                    noPermissionMessage(commandSender);
+                if (hasNoPermission(commandSender, SedexLivesPermissions.CHECK_MAXLIVES_OTHERS)) {
                     return true;
                 }
 

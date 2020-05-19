@@ -54,8 +54,7 @@ public class ReloadLivesCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("reload")) {
 
-            if (!hasPermission(commandSender, SedexLivesPermissions.RELOAD_CONFIG)) {
-                noPermissionMessage(commandSender);
+            if (hasNoPermission(commandSender, SedexLivesPermissions.RELOAD_CONFIG)) {
                 return true;
             }
 
