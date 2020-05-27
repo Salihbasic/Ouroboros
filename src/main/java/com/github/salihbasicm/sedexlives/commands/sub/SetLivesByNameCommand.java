@@ -23,14 +23,14 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.commands.sub;
 
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
 import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import org.bukkit.ChatColor;
+import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class SetLivesByNameCommand extends AbstractSubCommand {
 
@@ -56,8 +56,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives set <player> <value> [override]",
-                "Attempts to set lives of a player where value is amount of lives. If override is true it will " +
-                        "override any maxlives permissions. Only works for online players.");
+                plugin.getMessageManager().getSimpleMessage(Message.LIVES_SET_HELP));
     }
 
     @Override
@@ -91,7 +90,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
             final int value = Integer.parseInt(args[2]);
 
             if (value < 0) {
-                commandSender.sendMessage(ChatColor.RED + "Value must not be negative!");
+                commandSender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
                 return true;
             }
 
@@ -100,18 +99,19 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
                 if (override) { // Override is true
 
                     targetUser.updateLives(value);
-                    successMessage(commandSender, targetUser.getUser().getName(), value);
+                    successMessage(commandSender, targetUser);
 
                 } else { // Override is false
 
                     if (!(value > targetUser.getMaxLives())) { // Value is less than or equal to max lives
 
                         targetUser.updateLives(value);
-                        successMessage(commandSender, targetUser.getUser().getName(), value);
+                        successMessage(commandSender, targetUser);
 
                     } else { // Value is greater than maxlives
 
-                        commandSender.sendMessage(ChatColor.RED + "Value is greater than player's max lives.");
+                        commandSender.sendMessage(plugin.getMessageManager()
+                                                    .getSimpleMessage(Message.LIVES_SET_GREATERVALUE));
 
                     }
 
@@ -119,7 +119,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
             } else { // Player not found
 
-                playerNotFound(commandSender, args[1]);
+                playerNotFound(commandSender);
 
             }
 
@@ -128,8 +128,8 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
         return true;
     }
 
-    private void successMessage(CommandSender sender, String playerName, final int lives) {
-        sender.sendMessage(ChatColor.GREEN + "Successfully set lives of " + playerName + " to " + lives + ".");
+    private void successMessage(CommandSender sender, LivesUser user) {
+        sender.sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_SET_SUCCESS));
     }
 
 }

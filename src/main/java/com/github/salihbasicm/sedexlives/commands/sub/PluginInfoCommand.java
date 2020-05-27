@@ -24,6 +24,7 @@ SOFTWARE.
 package com.github.salihbasicm.sedexlives.commands.sub;
 
 import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
+import com.github.salihbasicm.sedexlives.lang.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -47,7 +48,7 @@ public class PluginInfoCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives info",
-                "Displays plugin info.");
+                plugin.getMessageManager().getSimpleMessage(Message.LIVES_INFO_HELP));
     }
 
     @Override

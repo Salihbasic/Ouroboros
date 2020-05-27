@@ -1,13 +1,13 @@
 package com.github.salihbasicm.sedexlives.commands.sub;
 
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
 import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import org.bukkit.ChatColor;
+import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class ToggleLivesCommand extends AbstractSubCommand {
 
@@ -27,8 +27,7 @@ public class ToggleLivesCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives toggle",
-                "Toggles lives on or off. When toggled off, lives system will not affect you. " +
-                        "Works only for a single session.");
+                plugin.getMessageManager().getSimpleMessage(Message.LIVES_TOGGLE_HELP));
     }
 
     @Override
@@ -55,12 +54,12 @@ public class ToggleLivesCommand extends AbstractSubCommand {
             if (user.isToggledOff()) {
 
                 user.setToggledOff(false);
-                user.getUser().sendMessage(ChatColor.GREEN + "Your lives have been toggled on.");
+                user.getUser().sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_TOGGLE_ON));
 
             } else {
 
                 user.setToggledOff(true);
-                user.getUser().sendMessage(ChatColor.GREEN + "Your lives have been toggled off.");
+                user.getUser().sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_TOGGLE_OFF));
 
             }
 

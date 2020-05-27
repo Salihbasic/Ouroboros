@@ -24,6 +24,7 @@ SOFTWARE.
 package com.github.salihbasicm.sedexlives.commands;
 
 import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.sedexlives.lang.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -80,47 +81,47 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     public boolean hasNoPermission(CommandSender sender, String permission) {
         if (!sender.hasPermission(permission)) {
             noPermissionMessage(sender);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /*
     Message sent if there is no permission found.
      */
     public void noPermissionMessage(CommandSender sender) {
-        sender.sendMessage(ChatColor.RED + "You do not have the required permissions to execute this command!");
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.NO_PERMISSION));
     }
 
     /*
     Message sent if the player is not found.
      */
-    public void playerNotFound(CommandSender sender, String username) {
-        sender.sendMessage(ChatColor.RED + "Could not find player: " + username + "!");
+    public void playerNotFound(CommandSender sender) {
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.USER_NOT_FOUND));
     }
 
     /*
     Message sent if the command does not have enough provided arguments.
      */
     public void notEnoughArguments(CommandSender sender, String help) {
-        sender.sendMessage(ChatColor.RED + "Not enough arguments!");
-        sender.sendMessage(ChatColor.RED + "Correct usage\n" + help);
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.NOT_ENOUGH_ARGUMENTS));
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
 
     /*
     Message sent if the command has too many provided arguments.
      */
     public void tooManyArguments(CommandSender sender, String help) {
-        sender.sendMessage(ChatColor.RED + "Too many arguments!");
-        sender.sendMessage(ChatColor.RED + "Correct usage:\n" + help);
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.TOO_MANY_ARGUMENTS));
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
 
     /*
     Message sent if the player is not supposed to execute the command.
      */
     public void invalidSenderMessage(CommandSender sender) {
-        sender.sendMessage("Only players can execute this command!");
+        sender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.INVALID_SENDER));
     }
 
 }

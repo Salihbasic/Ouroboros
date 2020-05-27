@@ -23,12 +23,12 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.commands.sub;
 
+import com.github.salihbasicm.sedexlives.SedexLives;
 import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import org.bukkit.ChatColor;
+import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class ReloadLivesCommand extends AbstractSubCommand {
 
@@ -45,8 +45,8 @@ public class ReloadLivesCommand extends AbstractSubCommand {
 
     @Override
     public String getHelp() {
-        return formatHelp("/lives reload",
-                "Reloads the config.");
+        return formatHelp("/lives reload [file]",
+                plugin.getMessageManager().getSimpleMessage(Message.LIVES_RELOAD_HELP));
     }
 
     @Override
@@ -58,14 +58,28 @@ public class ReloadLivesCommand extends AbstractSubCommand {
                 return true;
             }
 
-            if (args.length > 1) {
+            if (args.length > 2) {
                 tooManyArguments(commandSender, getHelp());
                 return true;
             }
 
-            commandSender.sendMessage(ChatColor.RED + "Attempting to reload config.");
+            if (args.length == 2) {
+
+                if (args[1].equalsIgnoreCase("messages")) {
+
+                    plugin.debugMessage("Attempting to reload config.");
+                    plugin.getMessageManager().reloadMessages();
+                    plugin.debugMessage("Successfully reloaded config!");
+
+                    return true;
+
+                }
+
+            }
+
+            plugin.debugMessage("Attempting to reload config.");
             plugin.reloadConfig();
-            commandSender.sendMessage(ChatColor.RED + "Successfully reloaded config!");
+            plugin.debugMessage("Successfully reloaded config!");
 
         }
 

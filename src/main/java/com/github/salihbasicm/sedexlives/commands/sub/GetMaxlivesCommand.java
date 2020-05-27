@@ -23,14 +23,14 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.commands.sub;
 
+import com.github.salihbasicm.sedexlives.LivesUser;
+import com.github.salihbasicm.sedexlives.SedexLives;
 import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import org.bukkit.ChatColor;
+import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 public class GetMaxlivesCommand extends AbstractSubCommand {
 
@@ -50,7 +50,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives maxlives [player]",
-                "Attempts to get maximum lives of a player. Only works for online players.");
+                plugin.getMessageManager().getSimpleMessage(Message.LIVES_MAXLIVES_HELP));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 LivesUser user = new LivesUser(plugin, playerSender);
 
-                playerSender.sendMessage(ChatColor.GREEN + "You have a maximum of " + user.getMaxLives() + " lives.");
+                playerSender.sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_MAXIMUM));
 
             }
 
@@ -87,12 +87,12 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
 
                 if (targetUser.getUser() != null) { // Player found
 
-                    commandSender.sendMessage(targetUser.getUser().getName() + ChatColor.GREEN +
-                            "has a maximum of " + targetUser.getMaxLives() + " lives.");
+                    commandSender.sendMessage(plugin.getMessageManager().getMessage(targetUser,
+                            Message.LIVES_MAXIMUM_OTHER));
 
                 } else {
 
-                    playerNotFound(commandSender, args[1]);
+                    playerNotFound(commandSender);
 
                 }
 

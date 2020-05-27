@@ -25,11 +25,11 @@ package com.github.salihbasicm.sedexlives.commands;
 
 import com.github.salihbasicm.sedexlives.SedexLives;
 import com.github.salihbasicm.sedexlives.commands.sub.*;
-import org.bukkit.ChatColor;
+import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 import java.util.HashMap;
 
@@ -57,7 +57,7 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
     @Override
     public String getHelp() {
 
-        return ChatColor.GOLD + "SedexLives Help:\n" +
+        return plugin.getMessageManager().getSimpleMessage(Message.LIVES_HELP) + "\n" +
                 subCommands.get("reload").getHelp() +
                 subCommands.get("info").getHelp() +
                 subCommands.get("check").getHelp() +
@@ -111,7 +111,8 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
 
                 } else {
 
-                    commandSender.sendMessage(ChatColor.RED + "Unrecognised sub-command " + argument + ".");
+                    commandSender.sendMessage( plugin.getMessageManager().getSimpleMessage(Message.LIVES_UNRECOGNISED) +
+                            " " + argument + "!");
                     commandSender.sendMessage(getHelp());
 
                 }

@@ -24,6 +24,7 @@ SOFTWARE.
 package com.github.salihbasicm.sedexlives.commands.sub;
 
 import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
+import com.github.salihbasicm.sedexlives.lang.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,9 +40,9 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
     }
 
     /*
-    Defines the sub-command "get" used to get the value of lives.
+    Defines the sub-command "check" used to get the value of lives.
 
-    Usage: /lives get [player name]
+    Usage: /lives check [player name]
 
     Using player name can only get the online player.
      */
@@ -49,7 +50,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives check [player]",
-                "Attempts to get lives of a player. Only works for online players.");
+                plugin.getMessageManager().getSimpleMessage(Message.LIVES_CHECK_HELP));
     }
 
     @Override
@@ -71,7 +72,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 LivesUser user = new LivesUser(plugin, playerSender);
 
-                user.getUser().sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(), user));
+                user.getUser().sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_MESSAGE));
 
             }
 
@@ -86,12 +87,12 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
                 if (targetUser.getUser() != null) {
 
-                    commandSender.sendMessage(plugin.getConfigManager().getLivesMessage(plugin.isPapiHooked(),
-                                                                                        targetUser));
+                    commandSender.sendMessage(plugin.getMessageManager().getMessage(targetUser,
+                            Message.LIVES_MESSAGE_OTHER));
 
                 } else {
 
-                    playerNotFound(commandSender, args[1]);
+                    playerNotFound(commandSender);
 
                 }
 

@@ -26,6 +26,7 @@ package com.github.salihbasicm.sedexlives;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.salihbasicm.sedexlives.commands.CommandManager;
 import com.github.salihbasicm.sedexlives.hooks.PlaceholderapiExpansion;
+import com.github.salihbasicm.sedexlives.lang.MessageManager;
 import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
 import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
 import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
@@ -45,6 +46,7 @@ public class SedexLives extends JavaPlugin {
     private ConfigManager configManager;
     private SQLManager sqlManager;
     private LivesUserCache livesUserCache;
+    private MessageManager messageManager;
 
     private boolean papiHooked = false;
 
@@ -56,6 +58,9 @@ public class SedexLives extends JavaPlugin {
 
         configManager = new ConfigManager(this.getConfig());
         sqlManager = SQLManager.getSQLManager(this);
+
+        messageManager = new MessageManager(this);
+        messageManager.saveDefaultMessages();
 
         sqlManager.setUpTable(); // If the table does not exist, it gets created. Nothing happens otherwise.
 
@@ -153,6 +158,10 @@ public class SedexLives extends JavaPlugin {
 
     public LoadingCache<LivesUser, Integer> getLivesUserCache() {
         return livesUserCache.getLivesCache();
+    }
+
+    public MessageManager getMessageManager() {
+        return messageManager;
     }
 
 }
