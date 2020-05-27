@@ -23,17 +23,12 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.util;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.Objects;
 
 /**
  * Abstraction layer over the actual {@link FileConfiguration} used for the default config.
  */
-public class ConfigManager {
+public class LivesConfig {
 
     private final FileConfiguration configuration;
 
@@ -47,12 +42,11 @@ public class ConfigManager {
     private final String PORT_PATH = "mysql.port";
     private final String DATABASE_PATH = "mysql.database";
 
-    private final String LIVES_MESSAGE_PATH = "livesMessage";
     private final String DEFAULT_LIVES_PATH = "defaultLives";
 
     // Constructor
 
-    public ConfigManager(FileConfiguration configuration) {
+    public LivesConfig(FileConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -84,28 +78,6 @@ public class ConfigManager {
 
     public int getDefaultLives() {
         return configuration.getInt(DEFAULT_LIVES_PATH);
-    }
-
-    /**
-     * Gets the message with placeholders from the config.
-     * If the PlaceholderAPI is installed, it will change all the placeholders to those from the API.
-     * Since this plugin also provides placeholders for PlaceholderAPI, those are also changed.
-     * If the PlaceholderAPI is not installed, it will only change the placeholders for %sedex_lives%.
-     *
-     * @param papiHooked Is the plugin hooked into PlaceholderAPI
-     * @param user User of the lives system
-     * @return Prepared lives message ready for further use
-     */
-    public String getLivesMessage(boolean papiHooked, LivesUser user) {
-        final String livesMessageInConfig = Objects.requireNonNull(configuration.getString(LIVES_MESSAGE_PATH),
-                                                            "livesMessage is null!");
-
-        if (papiHooked)
-            return PlaceholderAPI.setPlaceholders(user.getUser(), livesMessageInConfig);
-        else
-            return ChatColor.translateAlternateColorCodes('&',
-                    livesMessageInConfig.replaceAll("%sedexlives_lives%", String.valueOf(user.getLives())))
-                    .replaceAll("%sedexlives_maxlives%", String.valueOf(user.getMaxLives()));
     }
 
 }

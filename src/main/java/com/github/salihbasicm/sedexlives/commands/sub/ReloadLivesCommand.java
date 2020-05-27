@@ -46,7 +46,7 @@ public class ReloadLivesCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives reload [file]",
-                plugin.getMessageManager().getSimpleMessage(Message.LIVES_RELOAD_HELP));
+                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_RELOAD_HELP));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ReloadLivesCommand extends AbstractSubCommand {
                 if (args[1].equalsIgnoreCase("messages")) {
 
                     plugin.debugMessage("Attempting to reload config.");
-                    plugin.getMessageManager().reloadMessages();
+                    plugin.getLivesMessage().reloadMessages();
                     plugin.debugMessage("Successfully reloaded config!");
 
                     return true;

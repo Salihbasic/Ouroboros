@@ -32,8 +32,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class SQLManager {
-    private static SQLManager sqlManager = null;
+public class MySQLStorage {
+    private static MySQLStorage mySqlStorage = null;
 
     private final String hostname;
     private final String port;
@@ -43,8 +43,8 @@ public class SQLManager {
 
     private HikariDataSource dataSource;
 
-    private SQLManager(final String hostname, final String port, final String username,
-                       final String password, final String database) {
+    private MySQLStorage(final String hostname, final String port, final String username,
+                         final String password, final String database) {
 
         this.hostname = hostname;
         this.port = port;
@@ -55,20 +55,20 @@ public class SQLManager {
     }
 
     /**
-     * Attempts to return an instance of {@link SQLManager}.
+     * Attempts to return an instance of {@link MySQLStorage}.
      *
      * @param plugin Instance of plugin
      * @return Instance of this class
      */
-    public static synchronized SQLManager getSQLManager(SedexLives plugin) {
-        final ConfigManager configManager = plugin.getConfigManager();
+    public static synchronized MySQLStorage getSQLManager(SedexLives plugin) {
+        final LivesConfig livesConfig = plugin.getLivesConfig();
 
-        if (sqlManager == null) {
-            sqlManager = new SQLManager(configManager.getHostname(), configManager.getPort(), configManager.getUsername(),
-                    configManager.getPassword(), configManager.getDatabase());
+        if (mySqlStorage == null) {
+            mySqlStorage = new MySQLStorage(livesConfig.getHostname(), livesConfig.getPort(), livesConfig.getUsername(),
+                    livesConfig.getPassword(), livesConfig.getDatabase());
         }
 
-        return sqlManager;
+        return mySqlStorage;
     }
 
     /**

@@ -50,7 +50,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives check [player]",
-                plugin.getMessageManager().getSimpleMessage(Message.LIVES_CHECK_HELP));
+                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_CHECK_HELP));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 LivesUser user = new LivesUser(plugin, playerSender);
 
-                user.getUser().sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_MESSAGE));
+                user.getUser().sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_MESSAGE));
 
             }
 
@@ -87,7 +87,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
                 if (targetUser.getUser() != null) {
 
-                    commandSender.sendMessage(plugin.getMessageManager().getMessage(targetUser,
+                    commandSender.sendMessage(plugin.getLivesMessage().getMessage(targetUser,
                             Message.LIVES_MESSAGE_OTHER));
 
                 } else {

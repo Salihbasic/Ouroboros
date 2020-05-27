@@ -51,7 +51,7 @@ public class PlayerJoin implements Listener {
 
         if (user.getUser().hasPermission(SedexLivesPermissions.USE_LIVES)) {
 
-            user.createUser(plugin.getConfigManager().getDefaultLives());
+            user.createUser(plugin.getLivesConfig().getDefaultLives());
 
         }
     }

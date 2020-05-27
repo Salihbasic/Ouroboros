@@ -48,7 +48,7 @@ public class PluginInfoCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives info",
-                plugin.getMessageManager().getSimpleMessage(Message.LIVES_INFO_HELP));
+                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_INFO_HELP));
     }
 
     @Override

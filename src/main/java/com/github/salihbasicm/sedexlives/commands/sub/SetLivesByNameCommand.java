@@ -56,7 +56,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives set <player> <value> [override]",
-                plugin.getMessageManager().getSimpleMessage(Message.LIVES_SET_HELP));
+                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_SET_HELP));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
             final int value = Integer.parseInt(args[2]);
 
             if (value < 0) {
-                commandSender.sendMessage(plugin.getMessageManager().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
+                commandSender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
                 return true;
             }
 
@@ -110,7 +110,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
                     } else { // Value is greater than maxlives
 
-                        commandSender.sendMessage(plugin.getMessageManager()
+                        commandSender.sendMessage(plugin.getLivesMessage()
                                                     .getSimpleMessage(Message.LIVES_SET_GREATERVALUE));
 
                     }
@@ -129,7 +129,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
     }
 
     private void successMessage(CommandSender sender, LivesUser user) {
-        sender.sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_SET_SUCCESS));
+        sender.sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_SET_SUCCESS));
     }
 
 }

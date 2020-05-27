@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.Objects;
 
-public class MessageManager {
+public class LivesMessage {
 
     private static final String FILE_NAME = "messages.yml";
 
@@ -19,7 +19,7 @@ public class MessageManager {
     private File msgFile;
     private FileConfiguration msgConf;
 
-    public MessageManager(final SedexLives plugin) {
+    public LivesMessage(final SedexLives plugin) {
         this.plugin = plugin;
         plugin.getLogger().info("Loaded messages.yml");
     }

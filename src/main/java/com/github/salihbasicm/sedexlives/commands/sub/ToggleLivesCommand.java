@@ -27,7 +27,7 @@ public class ToggleLivesCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives toggle",
-                plugin.getMessageManager().getSimpleMessage(Message.LIVES_TOGGLE_HELP));
+                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_TOGGLE_HELP));
     }
 
     @Override
@@ -54,12 +54,12 @@ public class ToggleLivesCommand extends AbstractSubCommand {
             if (user.isToggledOff()) {
 
                 user.setToggledOff(false);
-                user.getUser().sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_TOGGLE_ON));
+                user.getUser().sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_TOGGLE_ON));
 
             } else {
 
                 user.setToggledOff(true);
-                user.getUser().sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_TOGGLE_OFF));
+                user.getUser().sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_TOGGLE_OFF));
 
             }
 

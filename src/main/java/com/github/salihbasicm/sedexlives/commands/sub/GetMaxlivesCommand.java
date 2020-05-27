@@ -50,7 +50,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives maxlives [player]",
-                plugin.getMessageManager().getSimpleMessage(Message.LIVES_MAXLIVES_HELP));
+                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_MAXLIVES_HELP));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 LivesUser user = new LivesUser(plugin, playerSender);
 
-                playerSender.sendMessage(plugin.getMessageManager().getMessage(user, Message.LIVES_MAXIMUM));
+                playerSender.sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_MAXIMUM));
 
             }
 
@@ -87,7 +87,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
 
                 if (targetUser.getUser() != null) { // Player found
 
-                    commandSender.sendMessage(plugin.getMessageManager().getMessage(targetUser,
+                    commandSender.sendMessage(plugin.getLivesMessage().getMessage(targetUser,
                             Message.LIVES_MAXIMUM_OTHER));
 
                 } else {

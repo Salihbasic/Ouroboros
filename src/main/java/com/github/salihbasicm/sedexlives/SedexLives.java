@@ -24,15 +24,15 @@ SOFTWARE.
 package com.github.salihbasicm.sedexlives;
 
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.github.salihbasicm.sedexlives.commands.CommandManager;
+import com.github.salihbasicm.sedexlives.commands.LivesCommand;
 import com.github.salihbasicm.sedexlives.hooks.PlaceholderapiExpansion;
-import com.github.salihbasicm.sedexlives.lang.MessageManager;
+import com.github.salihbasicm.sedexlives.lang.LivesMessage;
 import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
 import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
 import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
-import com.github.salihbasicm.sedexlives.util.ConfigManager;
+import com.github.salihbasicm.sedexlives.util.LivesConfig;
 import com.github.salihbasicm.sedexlives.util.LivesUserCache;
-import com.github.salihbasicm.sedexlives.util.SQLManager;
+import com.github.salihbasicm.sedexlives.util.MySQLStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,10 +43,10 @@ import java.util.logging.Level;
 
 public class SedexLives extends JavaPlugin {
 
-    private ConfigManager configManager;
-    private SQLManager sqlManager;
+    private LivesConfig livesConfig;
+    private MySQLStorage mySqlStorage;
     private LivesUserCache livesUserCache;
-    private MessageManager messageManager;
+    private LivesMessage livesMessage;
 
     private boolean papiHooked = false;
 
@@ -56,13 +56,13 @@ public class SedexLives extends JavaPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
 
-        configManager = new ConfigManager(this.getConfig());
-        sqlManager = SQLManager.getSQLManager(this);
+        livesConfig = new LivesConfig(this.getConfig());
+        mySqlStorage = MySQLStorage.getSQLManager(this);
 
-        messageManager = new MessageManager(this);
-        messageManager.saveDefaultMessages();
+        livesMessage = new LivesMessage(this);
+        livesMessage.saveDefaultMessages();
 
-        sqlManager.setUpTable(); // If the table does not exist, it gets created. Nothing happens otherwise.
+        mySqlStorage.setUpTable(); // If the table does not exist, it gets created. Nothing happens otherwise.
 
         livesUserCache = new LivesUserCache();
 
@@ -70,8 +70,8 @@ public class SedexLives extends JavaPlugin {
 
         registerListeners();
 
-        CommandManager commandManager = new CommandManager(this);
-        Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(commandManager);
+        LivesCommand livesCommand = new LivesCommand(this);
+        Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(livesCommand);
 
         toggledOff = new ArrayList<>();
 
@@ -100,12 +100,12 @@ public class SedexLives extends JavaPlugin {
     }
 
     /*
-    Reloads the config and resets the configManager so it effectively gets reloaded too.
+    Reloads the config and resets the livesConfig so it effectively gets reloaded too.
      */
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        configManager = new ConfigManager(this.getConfig());
+        livesConfig = new LivesConfig(this.getConfig());
     }
 
     /**
@@ -115,27 +115,27 @@ public class SedexLives extends JavaPlugin {
      */
     public void debugMessage(String message) {
 
-        if (getConfigManager().debugEnabled())
+        if (getLivesConfig().debugEnabled())
             this.getLogger().log(Level.INFO, "[DEBUG]: " + message);
 
     }
 
     /**
-     * Plugin's {@link ConfigManager}.
+     * Plugin's {@link LivesConfig}.
      *
-     * @return ConfigManager for this plugin's instance
+     * @return LivesConfig for this plugin's instance
      */
-    public ConfigManager getConfigManager() {
-        return configManager;
+    public LivesConfig getLivesConfig() {
+        return livesConfig;
     }
 
     /**
-     * Plugin's {@link SQLManager}
+     * Plugin's {@link MySQLStorage}
      *
-     * @return SQLManager for this plugin's instance
+     * @return MySQLStorage for this plugin's instance
      */
-    public SQLManager getSqlManager() {
-        return sqlManager;
+    public MySQLStorage getMySqlStorage() {
+        return mySqlStorage;
     }
 
     /**
@@ -160,8 +160,8 @@ public class SedexLives extends JavaPlugin {
         return livesUserCache.getLivesCache();
     }
 
-    public MessageManager getMessageManager() {
-        return messageManager;
+    public LivesMessage getLivesMessage() {
+        return livesMessage;
     }
 
 }

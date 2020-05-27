@@ -38,11 +38,11 @@ import java.util.HashMap;
  * Sub-command is any argument immediately following {@code /lives} command.
  *
  */
-public class CommandManager extends AbstractSubCommand implements CommandExecutor {
+public class LivesCommand extends AbstractSubCommand implements CommandExecutor {
 
-    private HashMap<String, AbstractSubCommand> subCommands = new HashMap<>();
+    private final HashMap<String, AbstractSubCommand> subCommands = new HashMap<>();
 
-    public CommandManager(SedexLives plugin) {
+    public LivesCommand(SedexLives plugin) {
         super(plugin);
 
         subCommands.put("reload", new ReloadLivesCommand(plugin));
@@ -57,7 +57,7 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
     @Override
     public String getHelp() {
 
-        return plugin.getMessageManager().getSimpleMessage(Message.LIVES_HELP) + "\n" +
+        return plugin.getLivesMessage().getSimpleMessage(Message.LIVES_HELP) + "\n" +
                 subCommands.get("reload").getHelp() +
                 subCommands.get("info").getHelp() +
                 subCommands.get("check").getHelp() +
@@ -111,7 +111,7 @@ public class CommandManager extends AbstractSubCommand implements CommandExecuto
 
                 } else {
 
-                    commandSender.sendMessage( plugin.getMessageManager().getSimpleMessage(Message.LIVES_UNRECOGNISED) +
+                    commandSender.sendMessage( plugin.getLivesMessage().getSimpleMessage(Message.LIVES_UNRECOGNISED) +
                             " " + argument + "!");
                     commandSender.sendMessage(getHelp());
 

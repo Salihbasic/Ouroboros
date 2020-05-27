@@ -1,7 +1,7 @@
 package com.github.salihbasicm.sedexlives;
 
-import com.github.salihbasicm.sedexlives.util.ConfigManager;
-import com.github.salihbasicm.sedexlives.util.SQLManager;
+import com.github.salihbasicm.sedexlives.util.LivesConfig;
+import com.github.salihbasicm.sedexlives.util.MySQLStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,8 +13,8 @@ import java.util.UUID;
 public class LivesUser {
 
     private final SedexLives plugin;
-    private final SQLManager sqlManager;
-    private final ConfigManager configManager;
+    private final MySQLStorage mySqlStorage;
+    private final LivesConfig livesConfig;
 
     private final Player user;
     private final UUID uuid;
@@ -26,8 +26,8 @@ public class LivesUser {
 
         this.uuid = user.getUniqueId();
 
-        this.sqlManager = plugin.getSqlManager();
-        this.configManager = plugin.getConfigManager();
+        this.mySqlStorage = plugin.getMySqlStorage();
+        this.livesConfig = plugin.getLivesConfig();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class LivesUser {
      */
     public int getLives() {
         this.plugin.debugMessage("Attempting to retrieve lives for UUID[ " + this.uuid + "] ...");
-        int lives = this.sqlManager.getPlayerLives(this.uuid);
+        int lives = this.mySqlStorage.getPlayerLives(this.uuid);
         this.plugin.debugMessage("Retrieved lives for UUID[" + this.uuid + "] with value[" + lives + "]!");
 
         return lives;
@@ -110,7 +110,7 @@ public class LivesUser {
 
         }
 
-        return configManager.getDefaultLives();
+        return livesConfig.getDefaultLives();
     }
 
     /**
@@ -174,7 +174,7 @@ public class LivesUser {
             @Override
             public void run() {
                 final String sql = "UPDATE sl_lives SET lives = " + newValue + " WHERE uuid = '" + uuid + "';";
-                sqlManager.update(sql);
+                mySqlStorage.update(sql);
 
                 plugin.getLivesUserCache().refresh(LivesUser.this);
             }
@@ -199,7 +199,7 @@ public class LivesUser {
                 final String sql = "INSERT IGNORE INTO sl_lives(lives, uuid) VALUES (" + defaultLives +
                         ", '" + uuid + "');";
 
-                sqlManager.update(sql);
+                mySqlStorage.update(sql);
             }
 
         }.runTaskAsynchronously(plugin);
