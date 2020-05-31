@@ -1,39 +1,27 @@
-/*
-MIT License
+package com.github.salihbasicm.sedexlives.storage;
 
-Copyright (c) 2020 Steinein_
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
- */
-
-package com.github.salihbasicm.sedexlives.util;
-
+import com.github.salihbasicm.sedexlives.LivesUser;
 import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.sedexlives.util.LivesConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class MySQLStorage {
-    private static MySQLStorage mySqlStorage = null;
+/**
+ * Provides implementation for storing the user data in a MySQL database.
+ * This class should not be initialised anywhere outside of main plugin class.
+ */
+public final class MySQLStorageProvider implements LivesStorage {
+
+    private final SedexLives plugin;
 
     private final String hostname;
     private final String port;
@@ -43,32 +31,62 @@ public class MySQLStorage {
 
     private HikariDataSource dataSource;
 
-    private MySQLStorage(final String hostname, final String port, final String username,
-                         final String password, final String database) {
+    public MySQLStorageProvider(final SedexLives plugin) {
 
-        this.hostname = hostname;
-        this.port = port;
-        this.username = username;
-        this.password = password;
-        this.database = database;
+        this.plugin = plugin;
+        LivesConfig config = plugin.getLivesConfig();
+
+        this.hostname = config.getHostname();
+        this.port = config.getPort();
+        this.username = config.getUsername();
+        this.password = config.getPassword();
+        this.database = config.getDatabase();
+
+        this.setUpTable();
+        plugin.getLogger().info("Data storage set to: " + this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void createUser(final LivesUser user, final int defaultLives) {
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+
+                // UUID has the UNIQUE constraint. If the UUID already exists in the database, IGNORE will just
+                // cancel execution of this statement, thus preventing duplicates.
+
+                final String mysql = "INSERT IGNORE INTO sl_lives(lives, uuid) VALUES (" + defaultLives +
+                        ", '" + user.getUniqueId() + "');";
+
+                MySQLStorageProvider.this.update(mysql);
+
+            }
+
+        }.runTaskAsynchronously(plugin);
+    }
+
+    @Override
+    public void updateLives(final LivesUser user, final int newValue) {
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                final String sql = "UPDATE sl_lives SET lives = " + newValue + " WHERE uuid = '" + user.getUniqueId() + "';";
+                MySQLStorageProvider.this.update(sql);
+
+                plugin.getLivesUserCache().refresh(user);
+
+            }
+
+        }.runTaskAsynchronously(plugin);
 
     }
 
-    /**
-     * Attempts to return an instance of {@link MySQLStorage}.
-     *
-     * @param plugin Instance of plugin
-     * @return Instance of this class
-     */
-    public static synchronized MySQLStorage getSQLManager(SedexLives plugin) {
-        final LivesConfig livesConfig = plugin.getLivesConfig();
-
-        if (mySqlStorage == null) {
-            mySqlStorage = new MySQLStorage(livesConfig.getHostname(), livesConfig.getPort(), livesConfig.getUsername(),
-                    livesConfig.getPassword(), livesConfig.getDatabase());
-        }
-
-        return mySqlStorage;
+    @Override
+    public int getLives(final LivesUser user) {
+        return getPlayerLives(user.getUniqueId());
     }
 
     /**
@@ -76,14 +94,16 @@ public class MySQLStorage {
      */
     private void connect() {
 
-        final String jdbcUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;
+        final String mysqlUrl = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database;
 
         HikariConfig config = new HikariConfig();
 
         config.setPoolName("sedexlives-hikari");
-        config.setJdbcUrl(jdbcUrl);
+
+        config.setJdbcUrl(mysqlUrl);
         config.setUsername(this.username);
         config.setPassword(this.password);
+        plugin.getLogger().info("Initialising MySQL connection...");
 
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
@@ -108,11 +128,40 @@ public class MySQLStorage {
     }
 
     /**
+     * Attempts to get a connection to the database.
+     *
+     * @return {@link Connection} if connection was successful, {@code null} otherwise
+     */
+    private Connection getConnection() throws SQLException {
+        return this.dataSource.getConnection();
+    }
+
+    /**
+     * Queries the database with a prepared statement.
+     *
+     * @param sql Prepared statement
+     * @return ResultSet with query values
+     */
+    private ResultSet query(final String sql) {
+
+        try (Connection connection = this.getConnection()){
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            return statement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    /**
      * Updates table with a prepared statement.
      *
      * @param sql Prepared statement
      */
-    public void update(final String sql) {
+    private void update(final String sql) {
 
         try (Connection connection = this.getConnection()) {
 
@@ -124,35 +173,6 @@ public class MySQLStorage {
             e.printStackTrace();
         }
 
-    }
-
-    /**
-     * Queries the database with a prepared statement.
-     *
-     * @param sql Prepared statement
-     * @return ResultSet with query values
-     */
-    public ResultSet query(final String sql) {
-
-        try (Connection connection = this.getConnection()){
-
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            return statement.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            return null;
-        }
-    }
-
-    /**
-     * Attempts to get a connection to the database.
-     *
-     * @return {@link Connection} if connection was successful, {@code null} otherwise
-     */
-    public Connection getConnection() throws SQLException {
-        return this.dataSource.getConnection();
     }
 
     /**
@@ -174,12 +194,12 @@ public class MySQLStorage {
 
             try (ResultSet resultSet = this.query(query)) {
 
-                if (resultSet == null)
+                if (resultSet == null) {
                     return lives;
+                }
 
                 if (resultSet.next()) { // Either empty or contains value
                     lives = resultSet.getInt("lives");
-                    resultSet.close();
                 }
 
             } catch (SQLException e) {
@@ -191,25 +211,28 @@ public class MySQLStorage {
         });
     }
 
-    /*
-    Wrapper method for getPlayerLives(final String uuid) method above. Unwraps the completable future.
+    /**
+     * Unwraps the result of {@code getPlayerLivesAsync}.
+     *
+     * @param uuid User's UUID
      */
-    public int getPlayerLives(final UUID uuid) {
+    private int getPlayerLives(final UUID uuid) {
         try {
             return getPlayerLivesAsync(uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
     }
 
     /*
      * Creates the main table if it does not exist.
      */
-    public void setUpTable() {
+    private void setUpTable() {
         this.connect();
 
         final String update = "CREATE TABLE IF NOT EXISTS sl_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
         this.update(update);
     }
+
 }

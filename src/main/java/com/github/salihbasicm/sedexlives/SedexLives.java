@@ -30,9 +30,12 @@ import com.github.salihbasicm.sedexlives.lang.LivesMessage;
 import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
 import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
 import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
+import com.github.salihbasicm.sedexlives.storage.FlatfileStorageProvider;
+import com.github.salihbasicm.sedexlives.storage.LivesStorage;
+import com.github.salihbasicm.sedexlives.storage.MySQLStorageProvider;
+import com.github.salihbasicm.sedexlives.storage.StorageType;
 import com.github.salihbasicm.sedexlives.util.LivesConfig;
 import com.github.salihbasicm.sedexlives.util.LivesUserCache;
-import com.github.salihbasicm.sedexlives.util.MySQLStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -44,9 +47,10 @@ import java.util.logging.Level;
 public class SedexLives extends JavaPlugin {
 
     private LivesConfig livesConfig;
-    private MySQLStorage mySqlStorage;
     private LivesUserCache livesUserCache;
     private LivesMessage livesMessage;
+
+    private LivesStorage storage;
 
     private boolean papiHooked = false;
 
@@ -57,12 +61,11 @@ public class SedexLives extends JavaPlugin {
         this.saveDefaultConfig();
 
         livesConfig = new LivesConfig(this.getConfig());
-        mySqlStorage = MySQLStorage.getSQLManager(this);
 
         livesMessage = new LivesMessage(this);
         livesMessage.saveDefaultMessages();
 
-        mySqlStorage.setUpTable(); // If the table does not exist, it gets created. Nothing happens otherwise.
+        initializeStorage(livesConfig.getStorageType());
 
         livesUserCache = new LivesUserCache();
 
@@ -99,6 +102,20 @@ public class SedexLives extends JavaPlugin {
 
     }
 
+    private void initializeStorage(final StorageType storageType) {
+
+        switch (storageType) {
+
+            case MYSQL:
+                storage = new MySQLStorageProvider(this);
+                break;
+            case FLATFILE:
+                storage = new FlatfileStorageProvider(this);
+                break;
+        }
+
+    }
+
     /*
     Reloads the config and resets the livesConfig so it effectively gets reloaded too.
      */
@@ -130,15 +147,6 @@ public class SedexLives extends JavaPlugin {
     }
 
     /**
-     * Plugin's {@link MySQLStorage}
-     *
-     * @return MySQLStorage for this plugin's instance
-     */
-    public MySQLStorage getMySqlStorage() {
-        return mySqlStorage;
-    }
-
-    /**
      * Represents all players that have toggled off the lives.
      *
      * @return HashMap of all players with toggled of lives
@@ -162,6 +170,10 @@ public class SedexLives extends JavaPlugin {
 
     public LivesMessage getLivesMessage() {
         return livesMessage;
+    }
+
+    public LivesStorage getStorage() {
+        return storage;
     }
 
 }

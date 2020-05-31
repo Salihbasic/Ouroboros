@@ -23,7 +23,10 @@ SOFTWARE.
 
 package com.github.salihbasicm.sedexlives.util;
 
+import com.github.salihbasicm.sedexlives.storage.StorageType;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.Objects;
 
 /**
  * Abstraction layer over the actual {@link FileConfiguration} used for the default config.
@@ -35,6 +38,8 @@ public class LivesConfig {
     // Config paths
 
     private final String DEBUG_PATH = "debug";
+
+    private final String STORAGE_PATH = "storage";
 
     private final String USERNAME_PATH = "mysql.username";
     private final String PASSWORD_PATH = "mysql.password";
@@ -54,6 +59,16 @@ public class LivesConfig {
 
     public boolean debugEnabled() {
         return configuration.getBoolean(DEBUG_PATH);
+    }
+
+    public StorageType getStorageType() {
+
+        switch (Objects.requireNonNull(configuration.getString(STORAGE_PATH))) {
+            case "MYSQL":
+                return StorageType.MYSQL;
+            default:
+                return StorageType.FLATFILE;
+        }
     }
 
     public String getUsername() {

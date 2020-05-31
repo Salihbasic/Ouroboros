@@ -1,11 +1,10 @@
 package com.github.salihbasicm.sedexlives;
 
+import com.github.salihbasicm.sedexlives.storage.LivesStorage;
 import com.github.salihbasicm.sedexlives.util.LivesConfig;
-import com.github.salihbasicm.sedexlives.util.MySQLStorage;
+import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.scheduler.BukkitRunnable;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -13,8 +12,10 @@ import java.util.UUID;
 public class LivesUser {
 
     private final SedexLives plugin;
-    private final MySQLStorage mySqlStorage;
+    // private final MySQLStorageProvider mySqlStorage;
     private final LivesConfig livesConfig;
+
+    private final LivesStorage storage;
 
     private final Player user;
     private final UUID uuid;
@@ -26,7 +27,8 @@ public class LivesUser {
 
         this.uuid = user.getUniqueId();
 
-        this.mySqlStorage = plugin.getMySqlStorage();
+        // this.mySqlStorage = plugin.getMySqlStorage();
+        this.storage = plugin.getStorage();
         this.livesConfig = plugin.getLivesConfig();
     }
 
@@ -75,7 +77,7 @@ public class LivesUser {
      */
     public int getLives() {
         this.plugin.debugMessage("Attempting to retrieve lives for UUID[ " + this.uuid + "] ...");
-        int lives = this.mySqlStorage.getPlayerLives(this.uuid);
+        int lives = this.storage.getLives(this);
         this.plugin.debugMessage("Retrieved lives for UUID[" + this.uuid + "] with value[" + lives + "]!");
 
         return lives;
@@ -162,6 +164,10 @@ public class LivesUser {
         return user;
     }
 
+    public UUID getUniqueId() {
+        return this.uuid;
+    }
+
     /**
      * Creates and async {@link org.bukkit.scheduler.BukkitTask} and attempts to update lives of player
      * representing representing this object.
@@ -169,17 +175,7 @@ public class LivesUser {
      * @param newValue New value of lives
      */
     public void updateLives(final int newValue) {
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                final String sql = "UPDATE sl_lives SET lives = " + newValue + " WHERE uuid = '" + uuid + "';";
-                mySqlStorage.update(sql);
-
-                plugin.getLivesUserCache().refresh(LivesUser.this);
-            }
-
-        }.runTaskAsynchronously(plugin);
+        this.storage.updateLives(this, newValue);
     }
 
     /**
@@ -188,21 +184,7 @@ public class LivesUser {
      * @param defaultLives Default value of lives to be given to the new user
      */
     public void createUser(final int defaultLives) {
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-
-                // UUID has the UNIQUE constraint. If the UUID already exists in the database, IGNORE will just
-                // cancel execution of this statement, thus preventing duplicates.
-
-                final String sql = "INSERT IGNORE INTO sl_lives(lives, uuid) VALUES (" + defaultLives +
-                        ", '" + uuid + "');";
-
-                mySqlStorage.update(sql);
-            }
-
-        }.runTaskAsynchronously(plugin);
+        this.storage.createUser(this, defaultLives);
     }
 
 }
