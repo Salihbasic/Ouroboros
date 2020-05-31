@@ -15,13 +15,3 @@ mysql:
 # unless they hold the permission 'sedexlives.maxlives.#' permission,
 # where '#' is any number.
 defaultLives: 3
-
-# Lives message.
-#
-# Plugin placeholders:
-#
-# %sedexlives_lives% - returns player's current lives
-# %sedexlives_maxlives% - returns player's maximum lives
-#
-# Supports all PlaceholderAPI placeholders.
-livesMessage: '&8[&6Lives&8] &aYou have %sedexlives_lives% lives.'
