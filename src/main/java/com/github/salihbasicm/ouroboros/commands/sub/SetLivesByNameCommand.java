@@ -21,21 +21,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.commands.sub;
+package com.github.salihbasicm.ouroboros.commands.sub;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import com.github.salihbasicm.sedexlives.lang.Message;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
+import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
+import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetLivesByNameCommand extends AbstractSubCommand {
 
-    public SetLivesByNameCommand(SedexLives lives) {
-        super(lives);
+    public SetLivesByNameCommand(Ouroboros ouroboros) {
+        super(ouroboros);
     }
 
     /*
@@ -56,7 +56,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives set <player> <value> [override]",
-                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_SET_HELP));
+                plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_SET_HELP));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("set")) {
 
-            if (hasNoPermission(commandSender, SedexLivesPermissions.SET_LIVES)) {
+            if (hasNoPermission(commandSender, OuroborosPermissions.SET_LIVES)) {
                 return true;
             }
 
@@ -85,12 +85,12 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
             }
 
             Player target = plugin.getServer().getPlayer(args[1]);
-            LivesUser targetUser = new LivesUser(plugin, target);
+            OuroborosUser targetUser = new OuroborosUser(plugin, target);
 
             final int value = Integer.parseInt(args[2]);
 
             if (value < 0) {
-                commandSender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
+                commandSender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
                 return true;
             }
 
@@ -110,7 +110,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
 
                     } else { // Value is greater than maxlives
 
-                        commandSender.sendMessage(plugin.getLivesMessage()
+                        commandSender.sendMessage(plugin.getOuroborosMessage()
                                                     .getSimpleMessage(Message.LIVES_SET_GREATERVALUE));
 
                     }
@@ -128,8 +128,8 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
         return true;
     }
 
-    private void successMessage(CommandSender sender, LivesUser user) {
-        sender.sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_SET_SUCCESS));
+    private void successMessage(CommandSender sender, OuroborosUser user) {
+        sender.sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_SET_SUCCESS));
     }
 
 }

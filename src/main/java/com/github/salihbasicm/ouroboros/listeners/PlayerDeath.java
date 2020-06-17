@@ -21,28 +21,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.listeners;
+package com.github.salihbasicm.ouroboros.listeners;
 
+import com.github.salihbasicm.ouroboros.OuroborosUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 
 public class PlayerDeath implements Listener {
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
 
-    public PlayerDeath(SedexLives plugin) {
+    public PlayerDeath(Ouroboros plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        LivesUser livesUser = new LivesUser(plugin, event.getEntity());
+        OuroborosUser livesUser = new OuroborosUser(plugin, event.getEntity());
 
-        if (livesUser.getUser().hasPermission(SedexLivesPermissions.USE_LIVES) &&
+        if (livesUser.getUser().hasPermission(OuroborosPermissions.USE_LIVES) &&
                 !livesUser.isToggledOff()) {
 
             int lives = livesUser.getLives();
@@ -51,14 +51,14 @@ public class PlayerDeath implements Listener {
 
                 event.setKeepInventory(true);
 
-                if (livesUser.getUser().hasPermission(SedexLivesPermissions.KEEP_EXP))
+                if (livesUser.getUser().hasPermission(OuroborosPermissions.KEEP_EXP))
                     event.setKeepLevel(true);
 
                 // Drops need to be cleared
                 event.getDrops().clear();
 
                 // Same
-                if (livesUser.getUser().hasPermission(SedexLivesPermissions.KEEP_EXP))
+                if (livesUser.getUser().hasPermission(OuroborosPermissions.KEEP_EXP))
                     event.setDroppedExp(0);
 
                 // Attempts to update (async) table with new lives by taking the old value and subtracting it with 1

@@ -17,6 +17,6 @@ mysql:
 # How many lives all players get by default.
 #
 # This also defines the maximum amount of lives a player may have,
-# unless they hold the permission 'sedexlives.maxlives.#' permission,
+# unless they hold the permission 'ouroboros.maxlives.#' permission,
 # where '#' is any number.
 defaultLives: 3

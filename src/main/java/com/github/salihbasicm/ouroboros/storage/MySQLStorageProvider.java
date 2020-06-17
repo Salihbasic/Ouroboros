@@ -1,8 +1,8 @@
-package com.github.salihbasicm.sedexlives.storage;
+package com.github.salihbasicm.ouroboros.storage;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.LivesConfig;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,9 +19,9 @@ import java.util.concurrent.ExecutionException;
  * Provides implementation for storing the user data in a MySQL database.
  * This class should not be initialised anywhere outside of main plugin class.
  */
-public final class MySQLStorageProvider implements LivesStorage {
+public final class MySQLStorageProvider implements OuroborosStorage {
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
 
     private final String hostname;
     private final String port;
@@ -31,10 +31,10 @@ public final class MySQLStorageProvider implements LivesStorage {
 
     private HikariDataSource dataSource;
 
-    public MySQLStorageProvider(final SedexLives plugin) {
+    public MySQLStorageProvider(final Ouroboros plugin) {
 
         this.plugin = plugin;
-        LivesConfig config = plugin.getLivesConfig();
+        OuroborosConfig config = plugin.getOuroborosConfig();
 
         this.hostname = config.getHostname();
         this.port = config.getPort();
@@ -47,7 +47,7 @@ public final class MySQLStorageProvider implements LivesStorage {
     }
 
     @Override
-    public void createUser(final LivesUser user, final int defaultLives) {
+    public void createUser(final OuroborosUser user, final int defaultLives) {
         new BukkitRunnable() {
 
             @Override
@@ -67,7 +67,7 @@ public final class MySQLStorageProvider implements LivesStorage {
     }
 
     @Override
-    public void updateLives(final LivesUser user, final int newValue) {
+    public void updateLives(final OuroborosUser user, final int newValue) {
 
         new BukkitRunnable() {
 
@@ -76,7 +76,7 @@ public final class MySQLStorageProvider implements LivesStorage {
                 final String sql = "UPDATE sl_lives SET lives = " + newValue + " WHERE uuid = '" + user.getUniqueId() + "';";
                 MySQLStorageProvider.this.update(sql);
 
-                plugin.getLivesUserCache().refresh(user);
+                plugin.getOuroborosUserCache().refresh(user);
 
             }
 
@@ -85,7 +85,7 @@ public final class MySQLStorageProvider implements LivesStorage {
     }
 
     @Override
-    public int getLives(final LivesUser user) {
+    public int getLives(final OuroborosUser user) {
         return getPlayerLives(user.getUniqueId());
     }
 

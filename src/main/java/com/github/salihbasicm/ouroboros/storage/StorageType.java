@@ -1,4 +1,4 @@
-package com.github.salihbasicm.sedexlives.storage;
+package com.github.salihbasicm.ouroboros.storage;
 
 /**
  * Enumerates various storage types this plugin supports.

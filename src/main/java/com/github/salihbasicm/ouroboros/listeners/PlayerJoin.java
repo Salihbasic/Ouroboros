@@ -21,26 +21,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.listeners;
+package com.github.salihbasicm.ouroboros.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 
 public class PlayerJoin implements Listener {
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
 
-    public PlayerJoin(SedexLives plugin) {
+    public PlayerJoin(Ouroboros plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        LivesUser user = new LivesUser(plugin, event.getPlayer());
+        OuroborosUser user = new OuroborosUser(plugin, event.getPlayer());
 
         /*
         This runs every time the player joins. It will open an async task and attempt to insert a player.
@@ -49,9 +49,9 @@ public class PlayerJoin implements Listener {
         If the player is not yet in the database, he gets in.
          */
 
-        if (user.getUser().hasPermission(SedexLivesPermissions.USE_LIVES)) {
+        if (user.getUser().hasPermission(OuroborosPermissions.USE_LIVES)) {
 
-            user.createUser(plugin.getLivesConfig().getDefaultLives());
+            user.createUser(plugin.getOuroborosConfig().getDefaultLives());
 
         }
     }

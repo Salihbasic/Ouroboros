@@ -1,7 +1,7 @@
-package com.github.salihbasicm.sedexlives.lang;
+package com.github.salihbasicm.ouroboros.lang;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,16 +10,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.Objects;
 
-public class LivesMessage {
+public class OuroborosMessage {
 
     private static final String FILE_NAME = "messages.yml";
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
 
     private File msgFile;
     private FileConfiguration msgConf;
 
-    public LivesMessage(final SedexLives plugin) {
+    public OuroborosMessage(final Ouroboros plugin) {
         this.plugin = plugin;
         plugin.getLogger().info("Loaded messages.yml");
     }
@@ -31,7 +31,7 @@ public class LivesMessage {
      * @param message Message
      * @return Fully formatted message
      */
-    public String getMessage(final LivesUser user, final Message message) {
+    public String getMessage(final OuroborosUser user, final Message message) {
         return formatMessage(user, message);
     }
 
@@ -61,15 +61,15 @@ public class LivesMessage {
      * @param message Message to be formatted
      * @return Fully formatted message
      */
-    private String formatMessage(final LivesUser user, final Message message) {
+    private String formatMessage(final OuroborosUser user, final Message message) {
 
         if (plugin.isPapiHooked())
             return PlaceholderAPI.setPlaceholders(user.getUser(), getMessageFromPath(message.getPath()));
         else
             return ChatColor.translateAlternateColorCodes('&',
                     getMessageFromPath(message.getPath())
-                            .replaceAll("%sedexlives_lives%", String.valueOf(user.getLives())))
-                            .replaceAll("%sedexlives_maxlives%", String.valueOf(user.getMaxLives()));
+                            .replaceAll("%ouroboros_lives%", String.valueOf(user.getLives())))
+                            .replaceAll("%ouroboros_maxlives%", String.valueOf(user.getMaxLives()));
     }
 
     /**

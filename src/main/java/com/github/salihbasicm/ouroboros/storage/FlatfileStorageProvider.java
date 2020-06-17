@@ -1,7 +1,7 @@
-package com.github.salihbasicm.sedexlives.storage;
+package com.github.salihbasicm.ouroboros.storage;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
+import com.github.salihbasicm.ouroboros.Ouroboros;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
  * especially for large servers with a large amount of users. Using a database is almost always
  * the better option.
  */
-public class FlatfileStorageProvider implements LivesStorage {
+public class FlatfileStorageProvider implements OuroborosStorage {
 
     /*
 
@@ -24,14 +24,14 @@ public class FlatfileStorageProvider implements LivesStorage {
 
      */
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
 
     private static final String FILENAME = "data.yml";
 
     private File storageFile;
     private FileConfiguration storageImpl;
 
-    public FlatfileStorageProvider(final SedexLives plugin) {
+    public FlatfileStorageProvider(final Ouroboros plugin) {
         this.plugin = plugin;
 
         storageImpl = loadStorage();
@@ -39,7 +39,7 @@ public class FlatfileStorageProvider implements LivesStorage {
     }
 
     @Override
-    public void createUser(final LivesUser user, final int defaultLives) {
+    public void createUser(final OuroborosUser user, final int defaultLives) {
 
         if (storageImpl.getString(user.getUniqueId().toString()) == null) {
             storageImpl.set(user.getUniqueId().toString(), defaultLives);
@@ -49,18 +49,18 @@ public class FlatfileStorageProvider implements LivesStorage {
     }
 
     @Override
-    public void updateLives(final LivesUser user, final int newValue) {
+    public void updateLives(final OuroborosUser user, final int newValue) {
 
         if (storageImpl.getString(user.getUniqueId().toString()) != null) {
             storageImpl.set(user.getUniqueId().toString(), newValue);
             saveStorage();
-            plugin.getLivesUserCache().refresh(user);
+            plugin.getOuroborosUserCache().refresh(user);
         }
 
     }
 
     @Override
-    public int getLives(final LivesUser user) {
+    public int getLives(final OuroborosUser user) {
 
         return (storageImpl.getString(user.getUniqueId().toString()) != null) ?
                 storageImpl.getInt(user.getUniqueId().toString()) : -1;

@@ -21,21 +21,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives;
+package com.github.salihbasicm.ouroboros;
 
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.github.salihbasicm.sedexlives.commands.LivesCommand;
-import com.github.salihbasicm.sedexlives.hooks.PlaceholderapiExpansion;
-import com.github.salihbasicm.sedexlives.lang.LivesMessage;
-import com.github.salihbasicm.sedexlives.listeners.PlayerDeath;
-import com.github.salihbasicm.sedexlives.listeners.PlayerJoin;
-import com.github.salihbasicm.sedexlives.listeners.PlayerQuit;
-import com.github.salihbasicm.sedexlives.storage.FlatfileStorageProvider;
-import com.github.salihbasicm.sedexlives.storage.LivesStorage;
-import com.github.salihbasicm.sedexlives.storage.MySQLStorageProvider;
-import com.github.salihbasicm.sedexlives.storage.StorageType;
-import com.github.salihbasicm.sedexlives.util.LivesConfig;
-import com.github.salihbasicm.sedexlives.util.LivesUserCache;
+import com.github.salihbasicm.ouroboros.commands.OuroborosCommand;
+import com.github.salihbasicm.ouroboros.hooks.PlaceholderapiExpansion;
+import com.github.salihbasicm.ouroboros.lang.OuroborosMessage;
+import com.github.salihbasicm.ouroboros.listeners.PlayerDeath;
+import com.github.salihbasicm.ouroboros.listeners.PlayerJoin;
+import com.github.salihbasicm.ouroboros.listeners.PlayerQuit;
+import com.github.salihbasicm.ouroboros.storage.FlatfileStorageProvider;
+import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
+import com.github.salihbasicm.ouroboros.storage.MySQLStorageProvider;
+import com.github.salihbasicm.ouroboros.storage.StorageType;
+import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
+import com.github.salihbasicm.ouroboros.util.OuroborosUserCache;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -44,36 +44,36 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public class SedexLives extends JavaPlugin {
+public class Ouroboros extends JavaPlugin {
 
-    private LivesConfig livesConfig;
-    private LivesUserCache livesUserCache;
-    private LivesMessage livesMessage;
+    private OuroborosConfig ouroborosConfig;
+    private OuroborosUserCache ouroborosUserCache;
+    private OuroborosMessage ouroborosMessage;
 
-    private LivesStorage storage;
+    private OuroborosStorage storage;
 
     private boolean papiHooked = false;
 
-    private List<LivesUser> toggledOff;
+    private List<OuroborosUser> toggledOff;
 
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
 
-        livesConfig = new LivesConfig(this.getConfig());
+        ouroborosConfig = new OuroborosConfig(this.getConfig());
 
-        livesMessage = new LivesMessage(this);
-        livesMessage.saveDefaultMessages();
+        ouroborosMessage = new OuroborosMessage(this);
+        ouroborosMessage.saveDefaultMessages();
 
-        initializeStorage(livesConfig.getStorageType());
+        initializeStorage(ouroborosConfig.getStorageType());
 
-        livesUserCache = new LivesUserCache();
+        ouroborosUserCache = new OuroborosUserCache();
 
         hookIntoPlaceholderAPI();
 
         registerListeners();
 
-        LivesCommand livesCommand = new LivesCommand(this);
+        OuroborosCommand livesCommand = new OuroborosCommand(this);
         Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(livesCommand);
 
         toggledOff = new ArrayList<>();
@@ -122,7 +122,7 @@ public class SedexLives extends JavaPlugin {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        livesConfig = new LivesConfig(this.getConfig());
+        ouroborosConfig = new OuroborosConfig(this.getConfig());
     }
 
     /**
@@ -132,18 +132,18 @@ public class SedexLives extends JavaPlugin {
      */
     public void debugMessage(String message) {
 
-        if (getLivesConfig().debugEnabled())
+        if (getOuroborosConfig().debugEnabled())
             this.getLogger().log(Level.INFO, "[DEBUG]: " + message);
 
     }
 
     /**
-     * Plugin's {@link LivesConfig}.
+     * Plugin's {@link OuroborosConfig}.
      *
-     * @return LivesConfig for this plugin's instance
+     * @return OuroborosConfig for this plugin's instance
      */
-    public LivesConfig getLivesConfig() {
-        return livesConfig;
+    public OuroborosConfig getOuroborosConfig() {
+        return ouroborosConfig;
     }
 
     /**
@@ -151,7 +151,7 @@ public class SedexLives extends JavaPlugin {
      *
      * @return HashMap of all players with toggled of lives
      */
-    public List<LivesUser> getToggledOff() {
+    public List<OuroborosUser> getToggledOff() {
         return toggledOff;
     }
 
@@ -164,15 +164,15 @@ public class SedexLives extends JavaPlugin {
         return papiHooked;
     }
 
-    public LoadingCache<LivesUser, Integer> getLivesUserCache() {
-        return livesUserCache.getLivesCache();
+    public LoadingCache<OuroborosUser, Integer> getOuroborosUserCache() {
+        return ouroborosUserCache.getOuroborosCache();
     }
 
-    public LivesMessage getLivesMessage() {
-        return livesMessage;
+    public OuroborosMessage getOuroborosMessage() {
+        return ouroborosMessage;
     }
 
-    public LivesStorage getStorage() {
+    public OuroborosStorage getStorage() {
         return storage;
     }
 

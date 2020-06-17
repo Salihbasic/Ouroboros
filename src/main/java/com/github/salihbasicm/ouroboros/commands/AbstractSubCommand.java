@@ -21,37 +21,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.commands;
+package com.github.salihbasicm.ouroboros.commands;
 
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.lang.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
- * Represents an abstract SedexLives sub-command.
+ * Represents an abstract Ouroboros sub-command.
  */
 public abstract class AbstractSubCommand implements CommandExecutor  {
 
-    protected SedexLives plugin;
+    protected Ouroboros plugin;
 
-    public AbstractSubCommand(SedexLives plugin) {
+    public AbstractSubCommand(Ouroboros plugin) {
         this.plugin = plugin;
     }
-
-    /*
-
-    Help messages should follow the format:
-
-    ChatColor.RED + "/lives <subcommand> <args...>" + ChatColor.WHITE + "- " + ChatColor.GREEN + "command description"
-
-    To get:
-
-    [RED](command) [WHITE]- [GREEN]description
-
-     */
 
     /**
      * Returns the help message of the command. Help message ought to be formatted uniformly, since
@@ -91,37 +79,37 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     Message sent if there is no permission found.
      */
     public void noPermissionMessage(CommandSender sender) {
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.NO_PERMISSION));
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NO_PERMISSION));
     }
 
     /*
     Message sent if the player is not found.
      */
     public void playerNotFound(CommandSender sender) {
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.USER_NOT_FOUND));
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.USER_NOT_FOUND));
     }
 
     /*
     Message sent if the command does not have enough provided arguments.
      */
     public void notEnoughArguments(CommandSender sender, String help) {
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.NOT_ENOUGH_ARGUMENTS));
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NOT_ENOUGH_ARGUMENTS));
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
 
     /*
     Message sent if the command has too many provided arguments.
      */
     public void tooManyArguments(CommandSender sender, String help) {
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.TOO_MANY_ARGUMENTS));
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.TOO_MANY_ARGUMENTS));
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
 
     /*
     Message sent if the player is not supposed to execute the command.
      */
     public void invalidSenderMessage(CommandSender sender) {
-        sender.sendMessage(plugin.getLivesMessage().getSimpleMessage(Message.INVALID_SENDER));
+        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.INVALID_SENDER));
     }
 
 }

@@ -21,10 +21,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.hooks;
+package com.github.salihbasicm.ouroboros.hooks;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -33,9 +33,9 @@ Do not touch. Expansion for PlaceholderAPI that adds custom plugin placeholder.
  */
 public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
 
-    public PlaceholderapiExpansion(SedexLives plugin) {
+    public PlaceholderapiExpansion(Ouroboros plugin) {
         this.plugin = plugin;
     }
 
@@ -51,7 +51,7 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "sedexlives";
+        return "ouroboros";
     }
 
     @Override
@@ -70,12 +70,12 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
         if (player == null)
             return "";
 
-        final LivesUser user = new LivesUser(plugin, player);
+        final OuroborosUser user = new OuroborosUser(plugin, player);
 
         switch (identifier) {
 
             case "lives":
-                return String.valueOf(plugin.getLivesUserCache().get(user));
+                return String.valueOf(plugin.getOuroborosUserCache().get(user));
             case "maxlives":
                 return String.valueOf(user.getMaxLives());
 

@@ -1,6 +1,6 @@
-name: SedexLives
+name: Ouroboros
 version: ${project.version}
-main: com.github.salihbasicm.sedexlives.SedexLives
+main: com.github.salihbasicm.sedexlives.Ouroboros
 author: Steinein_
 description: Allows players to use lives in order to keep their inventory or XP.
 api-version: "1.15"
@@ -9,37 +9,37 @@ softdepend: [PlaceholderAPI]
 
 commands:
   lives:
-    description: Main SedexLives command
+    description: Main Ouroboros command
     usage: /<command>
 
 permissions:
-  sedexlives.use:
-    description: Lets players use the SedexLives system.
+  ouroboros.use:
+    description: Lets players use the Ouroboros system.
     default: op
-  sedexlives.keepxp:
+  ouroboros.keepxp:
     description: Lets players keep their XP on death.
     default: op
-  sedexlives.check:
+  ouroboros.check:
     description: Lets players check their own lives.
     default: op
-  sedexlives.check.others:
+  ouroboros.check.others:
     description: Lets players check others' lives.
     default: op
-  sedexlives.check.maxlives:
+  ouroboros.check.maxlives:
     description: Lets players check their own max lives.
     default: op
-  sedexlives.check.maxlives.others:
+  ouroboros.check.maxlives.others:
     description: Lets players check others' lives.
     default: op
-  sedexlives.set:
+  ouroboros.set:
     description: Lets players set their own or others' lives.
     default: op
-  sedexlives.maxlives:
+  ouroboros.maxlives:
     description: Defines the maximum amount of lives a player may have.
     default: op
-  sedexlives.toggle:
+  ouroboros.toggle:
     description: Toggles lives system on or off.
     default: op
-  sedexlives.reload:
+  ouroboros.reload:
     description: Reloads the plugin config.
     default: op

@@ -1,18 +1,18 @@
-package com.github.salihbasicm.sedexlives.commands.sub;
+package com.github.salihbasicm.ouroboros.commands.sub;
 
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import com.github.salihbasicm.sedexlives.lang.Message;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
+import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
+import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ToggleLivesCommand extends AbstractSubCommand {
 
-    public ToggleLivesCommand(SedexLives lives) {
-        super(lives);
+    public ToggleLivesCommand(Ouroboros ouroboros) {
+        super(ouroboros);
     }
 
     /*
@@ -27,7 +27,7 @@ public class ToggleLivesCommand extends AbstractSubCommand {
     @Override
     public String getHelp() {
         return formatHelp("/lives toggle",
-                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_TOGGLE_HELP));
+                plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_TOGGLE_HELP));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ToggleLivesCommand extends AbstractSubCommand {
 
         if (label.equalsIgnoreCase("toggle")) {
 
-            if (hasNoPermission(commandSender, SedexLivesPermissions.TOGLE_LIVES)) {
+            if (hasNoPermission(commandSender, OuroborosPermissions.TOGLE_LIVES)) {
                 return true;
             }
 
@@ -49,17 +49,17 @@ public class ToggleLivesCommand extends AbstractSubCommand {
             }
 
             Player playerSender = (Player) commandSender;
-            LivesUser user = new LivesUser(plugin, playerSender);
+            OuroborosUser user = new OuroborosUser(plugin, playerSender);
 
             if (user.isToggledOff()) {
 
                 user.setToggledOff(false);
-                user.getUser().sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_TOGGLE_ON));
+                user.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_TOGGLE_ON));
 
             } else {
 
                 user.setToggledOff(true);
-                user.getUser().sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_TOGGLE_OFF));
+                user.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_TOGGLE_OFF));
 
             }
 

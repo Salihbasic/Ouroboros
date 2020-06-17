@@ -1,4 +1,4 @@
-package com.github.salihbasicm.sedexlives.lang;
+package com.github.salihbasicm.ouroboros.lang;
 
 /**
  * Represents every message specified in {@code messages.yml} used for plugin localization.

@@ -23,10 +23,10 @@ unrecognised-command: '&cUnrecognised sub-command'
 #                                                                            #
 ##############################################################################
 
-lives-message: '&aYou have &6%sedexlives_lives% &alives.'
-lives-message-other: '&aUser has &6%sedexlives_lives% &alives.'
-lives-maximum: '&aYou have a maximum of &6%sedexlives_maxlives% &alives.'
-lives-maximum-other: '&aUser has a maximum of &6%sedexlives_maxlives% &alives.'
+lives-message: '&aYou have &6%ouroboros_lives% &alives.'
+lives-message-other: '&aUser has &6%ouroboros_lives% &alives.'
+lives-maximum: '&aYou have a maximum of &6%ouroboros_lives% &alives.'
+lives-maximum-other: '&aUser has a maximum of &6%ouroboros_lives% &alives.'
 lives-set-nonnegative: '&cValue must not be negative!'
 lives-set-greatervalue: '&cValue is greater than max lives of the user.'
 lives-set-success: '&aSuccessfully set lives for the user.'
@@ -42,7 +42,7 @@ lives-toggle-off: '&aYour lives have been toggled off.'
 #                                                                            #
 ##############################################################################
 
-lives-help: '&6SedexLives Help:'
+lives-help: '&6Ouroboros Help:'
 lives-check: '&aAttempts to get lives of a player. Only works for online players.'
 lives-maxlives: '&aAttempts to get maximum lives of a player. Only works for online players.'
 lives-info: '&aDisplays plugin info.'

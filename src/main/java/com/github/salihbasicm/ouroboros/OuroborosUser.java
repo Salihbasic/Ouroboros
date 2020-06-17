@@ -1,26 +1,26 @@
-package com.github.salihbasicm.sedexlives;
+package com.github.salihbasicm.ouroboros;
 
-import com.github.salihbasicm.sedexlives.storage.LivesStorage;
-import com.github.salihbasicm.sedexlives.util.LivesConfig;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
+import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
+import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class LivesUser {
+public class OuroborosUser {
 
-    private final SedexLives plugin;
+    private final Ouroboros plugin;
     // private final MySQLStorageProvider mySqlStorage;
-    private final LivesConfig livesConfig;
+    private final OuroborosConfig ouroborosConfig;
 
-    private final LivesStorage storage;
+    private final OuroborosStorage storage;
 
     private final Player user;
     private final UUID uuid;
 
-    public LivesUser(SedexLives plugin, Player user) {
+    public OuroborosUser(Ouroboros plugin, Player user) {
         this.plugin = plugin;
 
         this.user = Objects.requireNonNull(user, "Player could not be found!");
@@ -29,7 +29,7 @@ public class LivesUser {
 
         // this.mySqlStorage = plugin.getMySqlStorage();
         this.storage = plugin.getStorage();
-        this.livesConfig = plugin.getLivesConfig();
+        this.ouroborosConfig = plugin.getOuroborosConfig();
     }
 
     @Override
@@ -38,12 +38,12 @@ public class LivesUser {
         if (obj == null)
             return false;
 
-        if (!(obj instanceof LivesUser))
+        if (!(obj instanceof OuroborosUser))
             return false;
 
         for (int i = 0; i < getSignificantFields().length; i++) {
 
-            if (!Objects.equals(this.getSignificantFields()[i], ((LivesUser) obj).getSignificantFields()[i]))
+            if (!Objects.equals(this.getSignificantFields()[i], ((OuroborosUser) obj).getSignificantFields()[i]))
                 return false;
 
         }
@@ -62,7 +62,7 @@ public class LivesUser {
     }
 
     /*
-    Returns fields which are used for comparing two LivesUser objects.
+    Returns fields which are used for comparing two OuroborosUser objects.
      */
     private Object[] getSignificantFields() {
         return new Object[] {
@@ -96,7 +96,7 @@ public class LivesUser {
 
         for (PermissionAttachmentInfo perm : user.getEffectivePermissions()) {
 
-            if (perm.getPermission().startsWith(SedexLivesPermissions.MAXLIVES_NUMBER)) {
+            if (perm.getPermission().startsWith(OuroborosPermissions.MAXLIVES_NUMBER)) {
 
                 String[] split = perm.getPermission().split("\\.");
 
@@ -112,7 +112,7 @@ public class LivesUser {
 
         }
 
-        return livesConfig.getDefaultLives();
+        return ouroborosConfig.getDefaultLives();
     }
 
     /**

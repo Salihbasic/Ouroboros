@@ -21,9 +21,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.util;
+package com.github.salihbasicm.ouroboros.util;
 
-import com.github.salihbasicm.sedexlives.storage.StorageType;
+import com.github.salihbasicm.ouroboros.storage.StorageType;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
@@ -31,7 +31,7 @@ import java.util.Objects;
 /**
  * Abstraction layer over the actual {@link FileConfiguration} used for the default config.
  */
-public class LivesConfig {
+public class OuroborosConfig {
 
     private final FileConfiguration configuration;
 
@@ -51,7 +51,7 @@ public class LivesConfig {
 
     // Constructor
 
-    public LivesConfig(FileConfiguration configuration) {
+    public OuroborosConfig(FileConfiguration configuration) {
         this.configuration = configuration;
     }
 

@@ -21,48 +21,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.commands.sub;
+package com.github.salihbasicm.ouroboros.commands.sub;
 
-import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import com.github.salihbasicm.sedexlives.lang.Message;
+import com.github.salihbasicm.ouroboros.OuroborosUser;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
+import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.github.salihbasicm.sedexlives.LivesUser;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
-public class CheckLivesByNameCommand extends AbstractSubCommand {
+public class GetMaxlivesCommand extends AbstractSubCommand {
 
 
-    public CheckLivesByNameCommand(SedexLives lives) {
-        super(lives);
+    public GetMaxlivesCommand(Ouroboros ouroboros) {
+        super(ouroboros);
     }
 
     /*
-    Defines the sub-command "check" used to get the value of lives.
+    Defines the sub-command "maxlives" used to get the maximum lives a player can have.
 
-    Usage: /lives check [player name]
+    Usage: /lives maxlives [player]
 
     Using player name can only get the online player.
      */
 
     @Override
     public String getHelp() {
-        return formatHelp("/lives check [player]",
-                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_CHECK_HELP));
+        return formatHelp("/lives maxlives [player]",
+                plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_MAXLIVES_HELP));
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
 
-        if (label.equalsIgnoreCase("check")) {
+        if (label.equalsIgnoreCase("maxlives")) {
 
-            if (hasNoPermission(commandSender, SedexLivesPermissions.CHECK_LIVES)) {
+            if (hasNoPermission(commandSender, OuroborosPermissions.CHECK_MAXLIVES)) {
                 return true;
             }
 
-            if (args.length == 1) { // Executed /lives get
+            if (args.length == 1) { // Executed /lives maxlives
 
                 if (!(commandSender instanceof Player)) {
                     invalidSenderMessage(commandSender);
@@ -70,25 +70,25 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 }
 
                 final Player playerSender = (Player) commandSender;
-                LivesUser user = new LivesUser(plugin, playerSender);
+                OuroborosUser user = new OuroborosUser(plugin, playerSender);
 
-                user.getUser().sendMessage(plugin.getLivesMessage().getMessage(user, Message.LIVES_MESSAGE));
+                playerSender.sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_MAXIMUM));
 
             }
 
-            if (args.length == 2) { // Executed /lives get <player name>
+            if (args.length == 2) { // Executed /lives maxlives <player>
 
-                if (hasNoPermission(commandSender, SedexLivesPermissions.CHECK_LIVES_OTHERS)) {
+                if (hasNoPermission(commandSender, OuroborosPermissions.CHECK_MAXLIVES_OTHERS)) {
                     return true;
                 }
 
-                final Player target = plugin.getServer().getPlayerExact(args[1]);
-                LivesUser targetUser = new LivesUser(plugin, target);
+                final Player target = plugin.getServer().getPlayer(args[1]);
+                OuroborosUser targetUser = new OuroborosUser(plugin, target);
 
-                if (targetUser.getUser() != null) {
+                if (targetUser.getUser() != null) { // Player found
 
-                    commandSender.sendMessage(plugin.getLivesMessage().getMessage(targetUser,
-                            Message.LIVES_MESSAGE_OTHER));
+                    commandSender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser,
+                            Message.LIVES_MAXIMUM_OTHER));
 
                 } else {
 
@@ -98,7 +98,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
             }
 
-            if (args.length > 2) {
+            if (args.length > 3) {
                 tooManyArguments(commandSender, getHelp());
                 return true;
             }

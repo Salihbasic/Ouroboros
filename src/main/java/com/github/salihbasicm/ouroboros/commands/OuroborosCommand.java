@@ -21,12 +21,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.commands;
+package com.github.salihbasicm.ouroboros.commands;
 
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.commands.sub.*;
-import com.github.salihbasicm.sedexlives.lang.Message;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.commands.sub.*;
+import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,15 +34,15 @@ import org.bukkit.command.CommandSender;
 import java.util.HashMap;
 
 /**
- * Manages all commands used by SedexLives.
+ * Manages all commands used by Ouroboros.
  * Sub-command is any argument immediately following {@code /lives} command.
  *
  */
-public class LivesCommand extends AbstractSubCommand implements CommandExecutor {
+public class OuroborosCommand extends AbstractSubCommand implements CommandExecutor {
 
     private final HashMap<String, AbstractSubCommand> subCommands = new HashMap<>();
 
-    public LivesCommand(SedexLives plugin) {
+    public OuroborosCommand(Ouroboros plugin) {
         super(plugin);
 
         subCommands.put("reload", new ReloadLivesCommand(plugin));
@@ -57,7 +57,7 @@ public class LivesCommand extends AbstractSubCommand implements CommandExecutor 
     @Override
     public String getHelp() {
 
-        return plugin.getLivesMessage().getSimpleMessage(Message.LIVES_HELP) + "\n" +
+        return plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_HELP) + "\n" +
                 subCommands.get("reload").getHelp() +
                 subCommands.get("info").getHelp() +
                 subCommands.get("check").getHelp() +
@@ -73,7 +73,7 @@ public class LivesCommand extends AbstractSubCommand implements CommandExecutor 
 
         if (label.equalsIgnoreCase("lives")) {
 
-            if (hasNoPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
+            if (hasNoPermission(commandSender, OuroborosPermissions.USE_LIVES)) {
                 return true;
             }
 
@@ -111,7 +111,7 @@ public class LivesCommand extends AbstractSubCommand implements CommandExecutor 
 
                 } else {
 
-                    commandSender.sendMessage( plugin.getLivesMessage().getSimpleMessage(Message.LIVES_UNRECOGNISED) +
+                    commandSender.sendMessage( plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_UNRECOGNISED) +
                             " " + argument + "!");
                     commandSender.sendMessage(getHelp());
 

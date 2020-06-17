@@ -21,57 +21,65 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.github.salihbasicm.sedexlives.commands.sub;
+package com.github.salihbasicm.ouroboros.commands.sub;
 
-import com.github.salihbasicm.sedexlives.commands.AbstractSubCommand;
-import com.github.salihbasicm.sedexlives.lang.Message;
-import org.bukkit.ChatColor;
+import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
+import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import com.github.salihbasicm.sedexlives.SedexLives;
-import com.github.salihbasicm.sedexlives.util.SedexLivesPermissions;
 
-public class PluginInfoCommand extends AbstractSubCommand {
+public class ReloadLivesCommand extends AbstractSubCommand {
 
 
-    public PluginInfoCommand(SedexLives lives) {
-        super(lives);
+    public ReloadLivesCommand(Ouroboros ouroboros) {
+        super(ouroboros);
     }
 
     /*
-    Defines the sub-command "info" which returns basic information about the plugin.
-    Information contains plugin name, version and author.
+    Defines the sub-command "reload" used to reload the config.
 
-    Usage: /lives info
+    Usage: /lives reload [file]
      */
 
     @Override
     public String getHelp() {
-        return formatHelp("/lives info",
-                plugin.getLivesMessage().getSimpleMessage(Message.LIVES_INFO_HELP));
+        return formatHelp("/lives reload [file]",
+                plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_RELOAD_HELP));
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
 
-        if (label.equalsIgnoreCase("info")) {
+        if (label.equalsIgnoreCase("reload")) {
+
+            if (hasNoPermission(commandSender, OuroborosPermissions.RELOAD_CONFIG)) {
+                return true;
+            }
 
             if (args.length > 2) {
                 tooManyArguments(commandSender, getHelp());
                 return true;
             }
 
-            if (hasNoPermission(commandSender, SedexLivesPermissions.USE_LIVES)) {
-                return true;
+            if (args.length == 2) {
+
+                if (args[1].equalsIgnoreCase("messages")) {
+
+                    plugin.debugMessage("Attempting to reload config.");
+                    plugin.getOuroborosMessage().reloadMessages();
+                    plugin.debugMessage("Successfully reloaded config!");
+
+                    return true;
+
+                }
+
             }
 
-            final String pluginInfo =
-                    ChatColor.RED + "Name: " + ChatColor.GREEN + plugin.getDescription().getName() + "\n" +
-                            ChatColor.RED + "Version: " + ChatColor.GREEN + plugin.getDescription().getVersion() + "\n" +
-                            ChatColor.RED + "Author: " + ChatColor.GREEN + String.join(", ",
-                            plugin.getDescription().getAuthors());
-
-            commandSender.sendMessage(pluginInfo);
+            plugin.debugMessage("Attempting to reload config.");
+            plugin.reloadConfig();
+            plugin.debugMessage("Successfully reloaded config!");
 
         }
 
