@@ -37,7 +37,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
 
     protected Ouroboros plugin;
 
-    public AbstractSubCommand(Ouroboros plugin) {
+    protected AbstractSubCommand(Ouroboros plugin) {
         this.plugin = plugin;
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
      * @param description Command description
      * @return Formatted help message
      */
-    public String formatHelp(String command, String description) {
+    public final String formatHelp(String command, String description) {
         return ChatColor.RED + command + ChatColor.WHITE + " - " + ChatColor.GREEN + description + "\n";
     }
 
@@ -66,7 +66,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     /*
     Additional abstraction to check for permissions.
      */
-    public boolean hasNoPermission(CommandSender sender, String permission) {
+    protected boolean hasNoPermission(CommandSender sender, String permission) {
         if (!sender.hasPermission(permission)) {
             noPermissionMessage(sender);
             return true;
@@ -78,21 +78,21 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     /*
     Message sent if there is no permission found.
      */
-    public void noPermissionMessage(CommandSender sender) {
+    protected final void noPermissionMessage(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NO_PERMISSION));
     }
 
     /*
     Message sent if the player is not found.
      */
-    public void playerNotFound(CommandSender sender) {
+    protected final void playerNotFound(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.USER_NOT_FOUND));
     }
 
     /*
     Message sent if the command does not have enough provided arguments.
      */
-    public void notEnoughArguments(CommandSender sender, String help) {
+    protected final void notEnoughArguments(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NOT_ENOUGH_ARGUMENTS));
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
@@ -100,7 +100,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     /*
     Message sent if the command has too many provided arguments.
      */
-    public void tooManyArguments(CommandSender sender, String help) {
+    protected final void tooManyArguments(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.TOO_MANY_ARGUMENTS));
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
@@ -108,7 +108,7 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     /*
     Message sent if the player is not supposed to execute the command.
      */
-    public void invalidSenderMessage(CommandSender sender) {
+    protected final void invalidSenderMessage(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.INVALID_SENDER));
     }
 

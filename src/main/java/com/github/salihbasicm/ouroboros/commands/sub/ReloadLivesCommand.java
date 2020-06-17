@@ -59,7 +59,7 @@ public class ReloadLivesCommand extends AbstractSubCommand {
             }
 
             if (args.length > 2) {
-                tooManyArguments(commandSender, getHelp());
+                tooManyArguments(commandSender);
                 return true;
             }
 

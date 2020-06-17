@@ -99,7 +99,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
             }
 
             if (args.length > 3) {
-                tooManyArguments(commandSender, getHelp());
+                tooManyArguments(commandSender);
                 return true;
             }
 

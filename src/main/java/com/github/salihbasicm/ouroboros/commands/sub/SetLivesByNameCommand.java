@@ -71,7 +71,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
             boolean override = true;
 
             if (args.length < 3) {
-                notEnoughArguments(commandSender, getHelp());
+                notEnoughArguments(commandSender);
                 return true;
             }
 
@@ -80,7 +80,7 @@ public class SetLivesByNameCommand extends AbstractSubCommand {
             }
 
             if (args.length > 4) {
-                tooManyArguments(commandSender, getHelp());
+                tooManyArguments(commandSender);
                 return true;
             }
 

@@ -57,7 +57,7 @@ public class PluginInfoCommand extends AbstractSubCommand {
         if (label.equalsIgnoreCase("info")) {
 
             if (args.length > 2) {
-                tooManyArguments(commandSender, getHelp());
+                tooManyArguments(commandSender);
                 return true;
             }
 

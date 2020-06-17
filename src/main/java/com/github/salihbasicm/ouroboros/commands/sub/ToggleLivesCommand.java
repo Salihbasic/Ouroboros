@@ -45,7 +45,7 @@ public class ToggleLivesCommand extends AbstractSubCommand {
             }
 
             if (args.length > 1) {
-                tooManyArguments(commandSender, getHelp());
+                tooManyArguments(commandSender);
             }
 
             Player playerSender = (Player) commandSender;
