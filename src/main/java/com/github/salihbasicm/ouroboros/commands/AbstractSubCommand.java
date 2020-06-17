@@ -63,8 +63,13 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
     @Override
     public abstract boolean onCommand(CommandSender commandSender, Command command, String label, String[] args);
 
-    /*
-    Additional abstraction to check for permissions.
+    /**
+     * Checks if the sender does not have a permission to execute a command.
+     * Allows easier and more concise permission checking.
+     *
+     * @param sender Command sender
+     * @param permission Command permission
+     * @return {@code true} if sender does not have the permission
      */
     protected boolean hasNoPermission(CommandSender sender, String permission) {
         if (!sender.hasPermission(permission)) {
@@ -75,38 +80,44 @@ public abstract class AbstractSubCommand implements CommandExecutor  {
         return false;
     }
 
-    /*
-    Message sent if there is no permission found.
+    /**
+     * Sends a {@code NO_PERMISSION} message to the sender.
+     * @param sender Command sender
      */
     protected final void noPermissionMessage(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NO_PERMISSION));
     }
 
-    /*
-    Message sent if the player is not found.
+    /**
+     * Sends a {@code USER_NOT_FOUND} message to the sender.
+     * @param sender Command sender
      */
     protected final void playerNotFound(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.USER_NOT_FOUND));
     }
 
-    /*
-    Message sent if the command does not have enough provided arguments.
+    /**
+     * Sends a {@code NOT_ENOUGH_ARGUMENTS} message to the sender, together with help output.
+     * @param sender Command sender
      */
     protected final void notEnoughArguments(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NOT_ENOUGH_ARGUMENTS));
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
 
-    /*
-    Message sent if the command has too many provided arguments.
+    /**
+     * Sends a {@code TOO_MANY_ARGUMENTS} message to the sender, together with help output.
+     * @param sender Command sender
      */
     protected final void tooManyArguments(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.TOO_MANY_ARGUMENTS));
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.CORRECT_USAGE) + "\n" + getHelp());
     }
 
-    /*
-    Message sent if the player is not supposed to execute the command.
+    /**
+     * Sends an {@code INVALID_SENDER} message to the sender. Used when the sender is not supposed to execute
+     * the specific command.
+     * @param sender Command sender
      */
     protected final void invalidSenderMessage(CommandSender sender) {
         sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.INVALID_SENDER));
