@@ -12,7 +12,6 @@ import java.util.UUID;
 public class OuroborosUser {
 
     private final Ouroboros plugin;
-    // private final MySQLStorageProvider mySqlStorage;
     private final OuroborosConfig ouroborosConfig;
 
     private final OuroborosStorage storage;
@@ -84,7 +83,7 @@ public class OuroborosUser {
     }
 
     /**
-     * Iteraters over {@link Player}'s permissions and attempts to find {@code sedexlives.maxlives.#} permission.
+     * Iteraters over {@link Player}'s permissions and attempts to find {@code ouroboros.maxlives.#} permission.
      * It then splits this permission and attempts to return number in place of {@code '#'}. If there is no number there,
      * or if the player has no permission, it returns the default maximum lives.
      *
