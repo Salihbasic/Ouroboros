@@ -26,7 +26,6 @@ public class OuroborosUser {
 
         this.uuid = user.getUniqueId();
 
-        // this.mySqlStorage = plugin.getMySqlStorage();
         this.storage = plugin.getStorage();
         this.ouroborosConfig = plugin.getOuroborosConfig();
     }
@@ -76,7 +75,7 @@ public class OuroborosUser {
      */
     public int getLives() {
         this.plugin.debugMessage("Attempting to retrieve lives for UUID[ " + this.uuid + "] ...");
-        int lives = this.storage.getLives(this);
+        int lives = Objects.requireNonNull(plugin.getOuroborosUserCache().get(this));
         this.plugin.debugMessage("Retrieved lives for UUID[" + this.uuid + "] with value[" + lives + "]!");
 
         return lives;
