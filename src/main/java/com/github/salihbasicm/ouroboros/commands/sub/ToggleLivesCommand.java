@@ -4,6 +4,7 @@ import com.github.salihbasicm.ouroboros.Ouroboros;
 import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
 import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.lang.MessageType;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -54,12 +55,12 @@ public class ToggleLivesCommand extends AbstractSubCommand {
             if (user.isToggledOff()) {
 
                 user.setToggledOff(false);
-                user.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_TOGGLE_ON));
+                user.sendMessage(Message.LIVES_TOGGLE_ON, MessageType.FORMAT);
 
             } else {
 
                 user.setToggledOff(true);
-                user.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_TOGGLE_OFF));
+                user.sendMessage(Message.LIVES_TOGGLE_OFF, MessageType.FORMAT);
 
             }
 

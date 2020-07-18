@@ -26,6 +26,7 @@ package com.github.salihbasicm.ouroboros.commands.sub;
 import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
 import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.lang.MessageType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -72,7 +73,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 OuroborosUser user = new OuroborosUser(plugin, playerSender);
 
-                user.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_MESSAGE));
+                user.sendMessage(Message.LIVES_MESSAGE, MessageType.FORMAT);
 
             }
 
@@ -87,8 +88,7 @@ public class CheckLivesByNameCommand extends AbstractSubCommand {
 
                 if (targetUser.getUser() != null) {
 
-                    commandSender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser,
-                            Message.LIVES_MESSAGE_OTHER));
+                    targetUser.sendMessage(Message.LIVES_MESSAGE_OTHER, MessageType.FORMAT);
 
                 } else {
 

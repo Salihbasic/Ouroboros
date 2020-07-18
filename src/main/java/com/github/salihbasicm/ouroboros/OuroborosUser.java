@@ -1,5 +1,8 @@
 package com.github.salihbasicm.ouroboros;
 
+import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.lang.MessageType;
+import com.github.salihbasicm.ouroboros.lang.OuroborosMessage;
 import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
 import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
@@ -66,6 +69,22 @@ public class OuroborosUser {
         return new Object[] {
                 uuid, user
         };
+    }
+
+    /**
+     * Sends a fully formatted {@link Message} to the specified user.
+     *
+     * @param message {@link Message} to be send
+     * @param messageType {@link MessageType} can be either {@code FORMAT} with placeholders or {@code SIMPLE} without
+     */
+    public void sendMessage(final Message message, final MessageType messageType) {
+        switch (messageType) {
+            case FORMAT:
+                this.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(this, message));
+                return;
+            case SIMPLE:
+                this.getUser().sendMessage(plugin.getOuroborosMessage().getSimpleMessage(message));
+        }
     }
 
     /**

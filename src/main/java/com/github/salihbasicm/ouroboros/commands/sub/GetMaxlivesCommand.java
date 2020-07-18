@@ -27,6 +27,7 @@ import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.Ouroboros;
 import com.github.salihbasicm.ouroboros.commands.AbstractSubCommand;
 import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.lang.MessageType;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -72,7 +73,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
                 final Player playerSender = (Player) commandSender;
                 OuroborosUser user = new OuroborosUser(plugin, playerSender);
 
-                playerSender.sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_MAXIMUM));
+                user.sendMessage(Message.LIVES_MAXIMUM, MessageType.FORMAT);
 
             }
 
@@ -87,8 +88,7 @@ public class GetMaxlivesCommand extends AbstractSubCommand {
 
                 if (targetUser.getUser() != null) { // Player found
 
-                    commandSender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser,
-                            Message.LIVES_MAXIMUM_OTHER));
+                    targetUser.sendMessage(Message.LIVES_MAXIMUM_OTHER, MessageType.FORMAT);
 
                 } else {
 
