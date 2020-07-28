@@ -43,5 +43,6 @@ public class OuroborosPermissions {
     public static final String MAXLIVES_NUMBER = "ouroboros.maxlives."; // Used to declare player's maxlives.
     public static final String SET_LIVES = "ouroboros.set"; // Lets the player set others' lives.
     public static final String TOGLE_LIVES = "ouroboros.toggle"; // Lets the player toggle off the lives system.
+    public static final String TOGLE_LIVES_OTHERS = "ouroboros.toggle.others"; // Lets semder toggle others' lives.
 
 }
