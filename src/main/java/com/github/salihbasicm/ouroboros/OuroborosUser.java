@@ -1,15 +1,15 @@
 package com.github.salihbasicm.ouroboros;
 
-import com.github.salihbasicm.ouroboros.lang.Message;
-import com.github.salihbasicm.ouroboros.lang.MessageType;
-import com.github.salihbasicm.ouroboros.lang.OuroborosMessage;
-import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
+import com.github.salihbasicm.ouroboros.messages.Message;
+import com.github.salihbasicm.ouroboros.storage.user.OuroborosUserStorage;
 import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class OuroborosUser {
@@ -17,7 +17,7 @@ public class OuroborosUser {
     private final Ouroboros plugin;
     private final OuroborosConfig ouroborosConfig;
 
-    private final OuroborosStorage storage;
+    private final OuroborosUserStorage storage;
 
     private final Player user;
     private final UUID uuid;
@@ -72,19 +72,11 @@ public class OuroborosUser {
     }
 
     /**
-     * Sends a fully formatted {@link Message} to the specified user.
-     *
-     * @param message {@link Message} to be send
-     * @param messageType {@link MessageType} can be either {@code FORMAT} with placeholders or {@code SIMPLE} without
+     * Returns the item this user holds in their main hand.
+     * @return Item in main hand as an {@link ItemStack}
      */
-    public void sendMessage(final Message message, final MessageType messageType) {
-        switch (messageType) {
-            case FORMAT:
-                this.getUser().sendMessage(plugin.getOuroborosMessage().getMessage(this, message));
-                return;
-            case SIMPLE:
-                this.getUser().sendMessage(plugin.getOuroborosMessage().getSimpleMessage(message));
-        }
+    public ItemStack getItemInMainHand() {
+        return this.getUser().getInventory().getItemInMainHand();
     }
 
     /**
@@ -94,10 +86,23 @@ public class OuroborosUser {
      */
     public int getLives() {
         this.plugin.debugMessage("Attempting to retrieve lives for UUID[ " + this.uuid + "] ...");
-        int lives = Objects.requireNonNull(plugin.getOuroborosUserCache().get(this));
+        int lives = this.storage.getLives(this);
         this.plugin.debugMessage("Retrieved lives for UUID[" + this.uuid + "] with value[" + lives + "]!");
 
         return lives;
+    }
+
+    /**
+     * Gets the cached lives of this particular user.
+     *
+     * @return Number of lives in cache
+     */
+    public int getCachedLives() {
+        this.plugin.debugMessage("Attempting to retrieve cached lives for UUID[ " + this.uuid + "] ...");
+        int cachedLives = Optional.ofNullable(plugin.getOuroborosCache().getUserCache().get(this)).orElse(-1);
+        this.plugin.debugMessage("Retrieved cached lives for UUID[" + this.uuid + "] with value[" + cachedLives + "]!");
+
+        return cachedLives;
     }
 
     /**

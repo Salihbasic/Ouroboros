@@ -27,8 +27,7 @@ import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.commands.AbstractCommandGroup;
 import com.github.salihbasicm.ouroboros.commands.processor.SenderType;
 import com.github.salihbasicm.ouroboros.commands.processor.SubCommand;
-import com.github.salihbasicm.ouroboros.lang.Message;
-import com.github.salihbasicm.ouroboros.lang.MessageType;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.github.salihbasicm.ouroboros.Ouroboros;
@@ -57,7 +56,7 @@ public class CheckLivesCommandGroup extends AbstractCommandGroup {
     )
     private void livesCheckYourself(final CommandSender sender, final String[] args) {
         final OuroborosUser user = new OuroborosUser(plugin, (Player) sender);
-        user.sendMessage(Message.LIVES_MESSAGE, MessageType.FORMAT);
+        sender.sendMessage(Message.LIVES_MESSAGE.formatMessage(user.getCachedLives()));
     }
 
     @SubCommand(
@@ -71,9 +70,10 @@ public class CheckLivesCommandGroup extends AbstractCommandGroup {
         final Player target = plugin.getServer().getPlayerExact(args[0]);
         if (target != null) {
             final OuroborosUser targetUser = new OuroborosUser(plugin, target);
-            sender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser, Message.LIVES_MESSAGE_OTHER));
+            sender.sendMessage(Message.LIVES_MESSAGE_OTHER.formatMessage(targetUser.getUser().getDisplayName(),
+                    targetUser.getCachedLives()));
         } else {
-            playerNotFound(sender);
+            playerNotFound(sender, args[0]);
         }
     }
 }

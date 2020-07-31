@@ -54,14 +54,4 @@ public class ReloadLivesCommandGroup extends AbstractCommandGroup {
         plugin.reloadConfig();
     }
 
-    @SubCommand(
-            sub = "messages",
-            usage = "/lives reload messages",
-            help = "Reloads the plugin messages.",
-            permission = OuroborosPermissions.RELOAD_CONFIG
-    )
-    private void reloadMessages(final CommandSender sender, final String[] args) {
-        plugin.debugMessage("Reloading messages.yml");
-        plugin.getOuroborosMessage().reloadMessages();
-    }
 }

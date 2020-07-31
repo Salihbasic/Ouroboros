@@ -5,8 +5,7 @@ import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.commands.AbstractCommandGroup;
 import com.github.salihbasicm.ouroboros.commands.processor.SenderType;
 import com.github.salihbasicm.ouroboros.commands.processor.SubCommand;
-import com.github.salihbasicm.ouroboros.lang.Message;
-import com.github.salihbasicm.ouroboros.lang.MessageType;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,12 +37,12 @@ public class ToggleLivesCommandGroup extends AbstractCommandGroup {
         if (user.isToggledOff()) {
 
             user.setToggledOff(false);
-            user.sendMessage(Message.LIVES_TOGGLE_ON, MessageType.FORMAT);
+            sender.sendMessage(Message.LIVES_TOGGLE.formatMessage("on"));
 
         } else {
 
             user.setToggledOff(true);
-            user.sendMessage(Message.LIVES_TOGGLE_OFF, MessageType.FORMAT);
+            sender.sendMessage(Message.LIVES_TOGGLE.formatMessage("off"));
 
         }
     }
@@ -64,14 +63,19 @@ public class ToggleLivesCommandGroup extends AbstractCommandGroup {
             if (targetUser.isToggledOff()) {
 
                 targetUser.setToggledOff(false);
-                sender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser, Message.LIVES_TOGGLE_ON));
+                sender.sendMessage(Message.LIVES_TOGGLE_OTHER.formatMessage("on"));
 
             } else {
 
                 targetUser.setToggledOff(true);
-                sender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser, Message.LIVES_TOGGLE_OFF));
+                sender.sendMessage(Message.LIVES_TOGGLE_OTHER.formatMessage("off"));
 
             }
+
+        } else { // target == null
+
+            playerNotFound(sender, args[0]);
+
         }
     }
 }

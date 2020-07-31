@@ -26,6 +26,7 @@ package com.github.salihbasicm.ouroboros.commands;
 import com.github.salihbasicm.ouroboros.Ouroboros;
 import com.github.salihbasicm.ouroboros.commands.processor.CommandProcessor;
 import com.github.salihbasicm.ouroboros.commands.sub.*;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -73,10 +74,10 @@ public class OuroborosCommand implements CommandExecutor {
             final Class<? extends AbstractCommandGroup> subCommandClass = subCommands.get(group).getClass();
             final CommandProcessor processor = new CommandProcessor(plugin, subCommandClass);
 
-            sender.sendMessage(ChatColor.GREEN + "Help from command group " + ChatColor.RED + group);
+            sender.sendMessage(Message.HELP_FOR_GROUP.formatMessage(group));
             processor.getSubCommandHelp().forEach(sender::sendMessage);
         } else {
-            sender.sendMessage(ChatColor.RED + "Could not find command group " + ChatColor.GREEN + group);
+            sender.sendMessage(Message.HELP_NOT_FOUND.formatMessage(group));
         }
     }
 
@@ -107,7 +108,6 @@ public class OuroborosCommand implements CommandExecutor {
                     final CommandProcessor commandProcessor = new CommandProcessor(plugin, subCommandClass);
 
                     commandProcessor.executeSubCommands(commandSender, sub, Arrays.copyOfRange(args, 2, args.length));
-
                 }
 
             }

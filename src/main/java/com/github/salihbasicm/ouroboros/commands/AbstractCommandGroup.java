@@ -24,7 +24,7 @@ SOFTWARE.
 package com.github.salihbasicm.ouroboros.commands;
 
 import com.github.salihbasicm.ouroboros.Ouroboros;
-import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -53,8 +53,8 @@ public abstract class AbstractCommandGroup {
      * Sends a {@code USER_NOT_FOUND} message to the sender.
      * @param sender Command sender
      */
-    protected final void playerNotFound(CommandSender sender) {
-        sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.USER_NOT_FOUND));
+    protected final void playerNotFound(CommandSender sender, final String playerName) {
+        sender.sendMessage(Message.USER_NOT_FOUND.formatMessage(playerName));
     }
 
 }

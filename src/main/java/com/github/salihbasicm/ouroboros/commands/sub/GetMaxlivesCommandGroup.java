@@ -28,8 +28,7 @@ import com.github.salihbasicm.ouroboros.Ouroboros;
 import com.github.salihbasicm.ouroboros.commands.AbstractCommandGroup;
 import com.github.salihbasicm.ouroboros.commands.processor.SenderType;
 import com.github.salihbasicm.ouroboros.commands.processor.SubCommand;
-import com.github.salihbasicm.ouroboros.lang.Message;
-import com.github.salihbasicm.ouroboros.lang.MessageType;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -59,7 +58,7 @@ public class GetMaxlivesCommandGroup extends AbstractCommandGroup {
     )
     private void maxlivesCheckYourself(final CommandSender sender, final String[] args) {
         final OuroborosUser user = new OuroborosUser(plugin, (Player) sender);
-        user.sendMessage(Message.LIVES_MAXIMUM, MessageType.FORMAT);
+        sender.sendMessage(Message.LIVES_MAXIMUM.formatMessage(user.getMaxLives()));
     }
 
     @SubCommand(
@@ -73,7 +72,10 @@ public class GetMaxlivesCommandGroup extends AbstractCommandGroup {
         final Player target = Bukkit.getServer().getPlayerExact(args[0]);
         if (target != null) {
             final OuroborosUser targetUser = new OuroborosUser(plugin, target);
-            sender.sendMessage(plugin.getOuroborosMessage().getMessage(targetUser, Message.LIVES_MAXIMUM_OTHER));
+            sender.sendMessage(Message.LIVES_MAXIMUM_OTHER.formatMessage(targetUser.getUser().getDisplayName(),
+                    targetUser.getMaxLives()));
+        } else {
+            playerNotFound(sender, args[0]);
         }
     }
 }

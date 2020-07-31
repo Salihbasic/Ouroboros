@@ -2,7 +2,7 @@ package com.github.salihbasicm.ouroboros.commands.processor;
 
 import com.github.salihbasicm.ouroboros.Ouroboros;
 import com.github.salihbasicm.ouroboros.commands.AbstractCommandGroup;
-import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -46,12 +46,12 @@ public final class CommandProcessor {
         for (Method subCommand : matchMethods(sub, args.length)) {
 
             if (!hasPermission(subCommand, sender)) {
-                sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.NO_PERMISSION));
+                sender.sendMessage(Message.NO_PERMISSION.formatMessage());
                 continue;
             }
 
             if (!isValidSender(subCommand, sender)) {
-                sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.INVALID_SENDER));
+                sender.sendMessage(Message.INVALID_SENDER.formatMessage(this.getSenderType(sender)));
                 continue;
             }
 

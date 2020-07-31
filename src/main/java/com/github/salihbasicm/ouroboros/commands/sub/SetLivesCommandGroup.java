@@ -27,7 +27,7 @@ import com.github.salihbasicm.ouroboros.Ouroboros;
 import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.commands.AbstractCommandGroup;
 import com.github.salihbasicm.ouroboros.commands.processor.SubCommand;
-import com.github.salihbasicm.ouroboros.lang.Message;
+import com.github.salihbasicm.ouroboros.messages.Message;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public class SetLivesCommandGroup extends AbstractCommandGroup {
         final int value = Integer.parseInt(args[1]);
 
         if (value < 0) {
-            sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
+            sender.sendMessage(Message.LIVES_SET_NONNEGATIVE.formatMessage(value));
             return;
         }
 
@@ -68,13 +68,19 @@ public class SetLivesCommandGroup extends AbstractCommandGroup {
             if (!(value > targetUser.getMaxLives())) { // Value is less than or equal to max lives
 
                 targetUser.updateLives(value);
-                successMessage(sender, targetUser);
+                sender.sendMessage(Message.LIVES_SET_SUCCESS.formatMessage(targetUser.getUser().getDisplayName(),
+                        value));
 
             } else { // Value is greater than maxlives
 
-                sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_SET_GREATERVALUE));
+                sender.sendMessage(Message.LIVES_SET_GREATERVALUE.formatMessage(value, targetUser.getMaxLives()));
 
             }
+
+        } else { // target == null
+
+            playerNotFound(sender, args[0]);
+
         }
     }
 
@@ -91,7 +97,7 @@ public class SetLivesCommandGroup extends AbstractCommandGroup {
         final boolean override = Boolean.parseBoolean(args[2]);
 
         if (value < 0) {
-            sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_SET_NONNEGATIVE));
+            sender.sendMessage(Message.LIVES_SET_NONNEGATIVE.formatMessage(value));
             return;
         }
 
@@ -102,27 +108,29 @@ public class SetLivesCommandGroup extends AbstractCommandGroup {
             if (override) {
 
                 targetUser.updateLives(value);
-                successMessage(sender, targetUser);
+                sender.sendMessage(Message.LIVES_SET_SUCCESS.formatMessage(targetUser.getUser().getDisplayName(),
+                        value));
 
             } else {
 
                 if (!(value > targetUser.getMaxLives())) { // Value is less than or equal to max lives
 
                     targetUser.updateLives(value);
-                    successMessage(sender, targetUser);
+                    sender.sendMessage(Message.LIVES_SET_SUCCESS.formatMessage(targetUser.getUser().getDisplayName(),
+                            value));
 
                 } else { // Value is greater than maxlives
 
-                    sender.sendMessage(plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_SET_GREATERVALUE));
+                    sender.sendMessage(Message.LIVES_SET_GREATERVALUE.formatMessage(value, targetUser.getMaxLives()));
 
                 }
             }
 
-        }
-    }
+        } else { // target == null
 
-    private void successMessage(CommandSender sender, OuroborosUser user) {
-        sender.sendMessage(plugin.getOuroborosMessage().getMessage(user, Message.LIVES_SET_SUCCESS));
+            playerNotFound(sender, args[0]);
+
+        }
     }
 
 }
