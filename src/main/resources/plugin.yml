@@ -31,11 +31,11 @@ permissions:
   ouroboros.check.maxlives.others:
     description: Lets players check others' lives.
     default: op
-  ouroboros.set:
-    description: Lets players set their own or others' lives.
-    default: op
   ouroboros.maxlives:
     description: Defines the maximum amount of lives a player may have.
+    default: op
+  ouroboros.set:
+    description: Lets players set their own or others' lives.
     default: op
   ouroboros.toggle:
     description: Toggles lives system on or off.
@@ -58,3 +58,11 @@ permissions:
   ouroboros.item.check:
     description: Checks an Ouroboros item for information
     default: op
+  ouroboros.permpack.user:
+    description: Permissions for an average user
+    default: op
+    children:
+      ouroboros.use: true
+      ouroboros.check: true
+      ouroboros.check.maxlives: true
+      ouroboros.toggle: true
