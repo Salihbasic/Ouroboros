@@ -63,12 +63,12 @@ public class ToggleLivesCommandGroup extends AbstractCommandGroup {
             if (targetUser.isToggledOff()) {
 
                 targetUser.setToggledOff(false);
-                sender.sendMessage(Message.LIVES_TOGGLE_OTHER.formatMessage("on"));
+                sender.sendMessage(Message.LIVES_TOGGLE_OTHER.formatMessage(target.getDisplayName(), "on"));
 
             } else {
 
                 targetUser.setToggledOff(true);
-                sender.sendMessage(Message.LIVES_TOGGLE_OTHER.formatMessage("off"));
+                sender.sendMessage(Message.LIVES_TOGGLE_OTHER.formatMessage(target.getDisplayName(), "off"));
 
             }
 

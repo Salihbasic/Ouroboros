@@ -34,8 +34,27 @@ public enum Message {
 
     HELP_FOR_GROUP("&aHelp for command group &c{0}:"),
 
-    HELP_NOT_FOUND("&cCould not find group &a{0}!");
+    HELP_NOT_FOUND("&cCould not find group &a{0}!"),
 
+    ITEM_SAVE_SUCCESS("&aSuccessfully saved item."),
+
+    ITEM_USING_AIR("&aCan not use AIR as an item!"),
+
+    ITEM_LIST("&cRegistered Ouroboros items ({0}): &6{1}"),
+
+    ITEM_NOT_EXIST("&c{0} is not a registered Ouroboros item!"),
+
+    ITEM_INFO_INTRO("&aInformation for &6{0}:"),
+
+    ITEM_INFO_ADD("&f- &aAdd: &6{0}"),
+
+    ITEM_INFO_OVERRIDE("&f- &aOverride: &6{0}"),
+
+    ITEM_REMOVE_SUCCESS("&aSuccessfully removed item {0}."),
+
+    ITEM_USE_SUCCESS("&aYou have gained {0} lives."),
+
+    ITEM_USE_FAIL_MAXLIVES("&cYou can not use this item. Your new lives would exceed your limit!");
 
     private final String message;
 
