@@ -62,6 +62,7 @@ public class OuroborosCommand implements CommandExecutor {
         subCommands.put("maxlives", new GetMaxlivesCommandGroup(plugin));
         subCommands.put("set", new SetLivesCommandGroup(plugin));
         subCommands.put("toggle", new ToggleLivesCommandGroup(plugin));
+        subCommands.put("item", new ItemCommandGroup(plugin));
     }
 
     /**

@@ -1,6 +1,6 @@
 name: Ouroboros
 version: ${project.version}
-main: com.github.salihbasicm.sedexlives.Ouroboros
+main: com.github.salihbasicm.ouroboros.Ouroboros
 author: Steinein_
 description: Allows players to use lives in order to keep their inventory or XP.
 api-version: "1.15"
@@ -40,6 +40,21 @@ permissions:
   ouroboros.toggle:
     description: Toggles lives system on or off.
     default: op
-  ouroboros.reload:
-    description: Reloads the plugin config.
+  ouroboros.toggle.others:
+    description: Toggle others' lives on or off.
+    default: op
+  ouroboros.item.add:
+    description: Adds a new Ouroboros item
+    default: op
+  ouroboros.item.list:
+    description: Lists Ouroboros items
+    default: op
+  ouroboros.item.get:
+    description: Gets an Ouroboros item
+    default: op
+  ouroboros.item.remove:
+    description: Removes an Ouroboros item
+    default: op
+  ouroboros.item.check:
+    description: Checks an Ouroboros item for information
     default: op

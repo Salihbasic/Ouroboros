@@ -23,19 +23,18 @@ SOFTWARE.
 
 package com.github.salihbasicm.ouroboros;
 
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.salihbasicm.ouroboros.commands.OuroborosCommand;
 import com.github.salihbasicm.ouroboros.hooks.PlaceholderapiExpansion;
-import com.github.salihbasicm.ouroboros.lang.OuroborosMessage;
 import com.github.salihbasicm.ouroboros.listeners.PlayerDeath;
 import com.github.salihbasicm.ouroboros.listeners.PlayerJoin;
 import com.github.salihbasicm.ouroboros.listeners.PlayerQuit;
-import com.github.salihbasicm.ouroboros.storage.FlatfileStorageProvider;
-import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
-import com.github.salihbasicm.ouroboros.storage.MySQLStorageProvider;
-import com.github.salihbasicm.ouroboros.storage.StorageType;
+import com.github.salihbasicm.ouroboros.listeners.PlayerUseItem;
+import com.github.salihbasicm.ouroboros.storage.item.ItemStorageFactory;
+import com.github.salihbasicm.ouroboros.storage.item.OuroborosItemStorage;
+import com.github.salihbasicm.ouroboros.storage.user.OuroborosUserStorage;
+import com.github.salihbasicm.ouroboros.storage.user.UserStorageFactory;
+import com.github.salihbasicm.ouroboros.util.OuroborosCache;
 import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
-import com.github.salihbasicm.ouroboros.util.OuroborosUserCache;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -75,7 +74,6 @@ public class Ouroboros extends JavaPlugin {
         Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(livesCommand);
 
         toggledOff = new ArrayList<>();
-
     }
 
     private void registerListeners() {
