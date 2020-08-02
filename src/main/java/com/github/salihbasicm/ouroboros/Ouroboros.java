@@ -82,6 +82,7 @@ public class Ouroboros extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerUseItem(this), this);
     }
 
     private void hookIntoPlaceholderAPI() {
@@ -96,20 +97,6 @@ public class Ouroboros extends JavaPlugin {
 
             this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholders may not work!");
 
-        }
-
-    }
-
-    private void initializeStorage(final StorageType storageType) {
-
-        switch (storageType) {
-
-            case MYSQL:
-                storage = new MySQLStorageProvider(this);
-                break;
-            case FLATFILE:
-                storage = new FlatfileStorageProvider(this);
-                break;
         }
 
     }

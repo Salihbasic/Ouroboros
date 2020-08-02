@@ -3,6 +3,7 @@ package com.github.salihbasicm.ouroboros;
 import com.github.salihbasicm.ouroboros.messages.Message;
 import com.github.salihbasicm.ouroboros.storage.user.OuroborosUserStorage;
 import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
+import com.github.salihbasicm.ouroboros.util.OuroborosItem;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -71,12 +72,28 @@ public class OuroborosUser {
         };
     }
 
-    /**
-     * Returns the item this user holds in their main hand.
-     * @return Item in main hand as an {@link ItemStack}
-     */
-    public ItemStack getItemInMainHand() {
-        return this.getUser().getInventory().getItemInMainHand();
+    public void useOuroborosItem(final ItemStack item) {
+        final int add = OuroborosItem.getAddFromOuroborosItem(plugin, item);
+        final boolean override = OuroborosItem.getOverrideFromOuroborosItem(plugin, item);
+        final int newLives = this.getCachedLives() + add;
+
+        if (override) {
+
+            this.updateLives(newLives);
+            this.getUser().sendMessage(Message.ITEM_USE_SUCCESS.formatMessage(add));
+            item.setAmount(item.getAmount() - 1);
+
+        } else {
+
+            if (newLives < this.getMaxLives()) {
+                this.updateLives(newLives);
+                this.getUser().sendMessage(Message.ITEM_USE_SUCCESS.formatMessage(add));
+                item.setAmount(item.getAmount() - 1);
+            } else {
+                this.getUser().sendMessage(Message.ITEM_USE_FAIL_MAXLIVES.formatMessage());
+            }
+
+        }
     }
 
     /**
