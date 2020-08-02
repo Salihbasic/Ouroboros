@@ -47,8 +47,7 @@ import java.util.logging.Level;
 public class Ouroboros extends JavaPlugin {
 
     private OuroborosConfig ouroborosConfig;
-    private OuroborosUserCache ouroborosUserCache;
-    private OuroborosMessage ouroborosMessage;
+    private OuroborosCache ouroborosCache;
 
     private OuroborosItemStorage itemStorage;
     private OuroborosUserStorage userStorage;
@@ -66,9 +65,7 @@ public class Ouroboros extends JavaPlugin {
         userStorage = new UserStorageFactory(this).getStorage(ouroborosConfig.getStorageType());
         itemStorage = new ItemStorageFactory(this).getStorage(ouroborosConfig.getStorageType());
 
-        initializeStorage(ouroborosConfig.getStorageType());
-
-        ouroborosUserCache = new OuroborosUserCache();
+        ouroborosCache = new OuroborosCache();
 
         hookIntoPlaceholderAPI();
 
@@ -165,8 +162,8 @@ public class Ouroboros extends JavaPlugin {
         return papiHooked;
     }
 
-    public LoadingCache<OuroborosUser, Integer> getOuroborosUserCache() {
-        return ouroborosUserCache.getOuroborosCache();
+    public OuroborosCache getOuroborosCache() {
+        return ouroborosCache;
     }
 
     public OuroborosItemStorage getOuroborosItemStorage() {
