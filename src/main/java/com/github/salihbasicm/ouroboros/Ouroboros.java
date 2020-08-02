@@ -50,7 +50,8 @@ public class Ouroboros extends JavaPlugin {
     private OuroborosUserCache ouroborosUserCache;
     private OuroborosMessage ouroborosMessage;
 
-    private OuroborosStorage storage;
+    private OuroborosItemStorage itemStorage;
+    private OuroborosUserStorage userStorage;
 
     private boolean papiHooked = false;
 
@@ -62,8 +63,8 @@ public class Ouroboros extends JavaPlugin {
 
         ouroborosConfig = new OuroborosConfig(this.getConfig());
 
-        ouroborosMessage = new OuroborosMessage(this);
-        ouroborosMessage.saveDefaultMessages();
+        userStorage = new UserStorageFactory(this).getStorage(ouroborosConfig.getStorageType());
+        itemStorage = new ItemStorageFactory(this).getStorage(ouroborosConfig.getStorageType());
 
         initializeStorage(ouroborosConfig.getStorageType());
 
@@ -168,12 +169,12 @@ public class Ouroboros extends JavaPlugin {
         return ouroborosUserCache.getOuroborosCache();
     }
 
-    public OuroborosMessage getOuroborosMessage() {
-        return ouroborosMessage;
+    public OuroborosItemStorage getOuroborosItemStorage() {
+        return itemStorage;
     }
 
-    public OuroborosStorage getStorage() {
-        return storage;
+    public OuroborosUserStorage getStorage() {
+        return userStorage;
     }
 
 }

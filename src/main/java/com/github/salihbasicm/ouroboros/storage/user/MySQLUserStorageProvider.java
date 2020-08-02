@@ -1,4 +1,4 @@
-package com.github.salihbasicm.ouroboros.storage;
+package com.github.salihbasicm.ouroboros.storage.user;
 
 import com.github.salihbasicm.ouroboros.OuroborosUser;
 import com.github.salihbasicm.ouroboros.Ouroboros;
@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
  * Provides implementation for storing the user data in a MySQL database.
  * This class should not be initialised anywhere outside of main plugin class.
  */
-public final class MySQLStorageProvider implements OuroborosStorage {
+public final class MySQLUserStorageProvider implements OuroborosUserStorage {
 
     private final Ouroboros plugin;
 
@@ -31,7 +31,7 @@ public final class MySQLStorageProvider implements OuroborosStorage {
 
     private HikariDataSource dataSource;
 
-    public MySQLStorageProvider(final Ouroboros plugin) {
+    public MySQLUserStorageProvider(final Ouroboros plugin) {
 
         this.plugin = plugin;
         OuroborosConfig config = plugin.getOuroborosConfig();
@@ -59,7 +59,7 @@ public final class MySQLStorageProvider implements OuroborosStorage {
                 final String mysql = "INSERT IGNORE INTO sl_lives(lives, uuid) VALUES (" + defaultLives +
                         ", '" + user.getUniqueId() + "');";
 
-                MySQLStorageProvider.this.update(mysql);
+                MySQLUserStorageProvider.this.update(mysql);
 
             }
 
@@ -74,9 +74,9 @@ public final class MySQLStorageProvider implements OuroborosStorage {
             @Override
             public void run() {
                 final String sql = "UPDATE sl_lives SET lives = " + newValue + " WHERE uuid = '" + user.getUniqueId() + "';";
-                MySQLStorageProvider.this.update(sql);
+                MySQLUserStorageProvider.this.update(sql);
 
-                plugin.getOuroborosUserCache().refresh(user);
+                plugin.getOuroborosCache().getUserCache().refresh(user);
 
             }
 
@@ -98,7 +98,7 @@ public final class MySQLStorageProvider implements OuroborosStorage {
 
         HikariConfig config = new HikariConfig();
 
-        config.setPoolName("sedexlives-hikari");
+        config.setPoolName("ouroboros-hikari");
 
         config.setJdbcUrl(mysqlUrl);
         config.setUsername(this.username);
@@ -231,7 +231,7 @@ public final class MySQLStorageProvider implements OuroborosStorage {
     private void setUpTable() {
         this.connect();
 
-        final String update = "CREATE TABLE IF NOT EXISTS sl_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
+        final String update = "CREATE TABLE IF NOT EXISTS ob_lives(lives int, uuid VARCHAR(36) NOT NULL UNIQUE);";
         this.update(update);
     }
 
