@@ -24,46 +24,62 @@ SOFTWARE.
 package com.github.salihbasicm.ouroboros.commands;
 
 import com.github.salihbasicm.ouroboros.Ouroboros;
+import com.github.salihbasicm.ouroboros.commands.processor.CommandProcessor;
 import com.github.salihbasicm.ouroboros.commands.sub.*;
-import com.github.salihbasicm.ouroboros.lang.Message;
-import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
+import com.github.salihbasicm.ouroboros.messages.Message;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Manages all commands used by Ouroboros.
- * Sub-command is any argument immediately following {@code /lives} command.
+ * <p>An Ouroboros command is the command of form: {@code /lives <group> <sub-command> [args]}.</p>
  *
+ * <p>Every group does one specific thing and contains sub-commands doing that same thing
+ * in a specific way. Every group is a child of the {@link AbstractCommandGroup} class.</p>
+ *
+ * <p>Each sub-command has its own label and required number of arguments. The label is denoted as
+ * <sub-command> in the form above.</p>
+ *
+ * <p>When a sender attempts to execute an Ouroboros command, the plugin analyzes the provided input and attempts to
+ * match it to a specific sub-command within a specific group, finally executing the sub-command if the match was
+ * successful.</p>
  */
-public class OuroborosCommand extends AbstractSubCommand implements CommandExecutor {
+public class OuroborosCommand implements CommandExecutor {
 
-    private final HashMap<String, AbstractSubCommand> subCommands = new HashMap<>();
+    private final Ouroboros plugin;
 
-    public OuroborosCommand(Ouroboros plugin) {
-        super(plugin);
+    private final HashMap<String, AbstractCommandGroup> subCommands = new HashMap<>();
 
-        subCommands.put("reload", new ReloadLivesCommand(plugin));
-        subCommands.put("info", new PluginInfoCommand(plugin));
-        subCommands.put("check", new CheckLivesByNameCommand(plugin));
-        subCommands.put("maxlives", new GetMaxlivesCommand(plugin));
-        subCommands.put("set", new SetLivesByNameCommand(plugin));
-        subCommands.put("toggle", new ToggleLivesCommand(plugin));
+    public OuroborosCommand(final Ouroboros plugin) {
+        this.plugin = plugin;
+
+        subCommands.put("reload", new ReloadLivesCommandGroup(plugin));
+        subCommands.put("check", new CheckLivesCommandGroup(plugin));
+        subCommands.put("maxlives", new GetMaxlivesCommandGroup(plugin));
+        subCommands.put("set", new SetLivesCommandGroup(plugin));
+        subCommands.put("toggle", new ToggleLivesCommandGroup(plugin));
+        subCommands.put("item", new ItemCommandGroup(plugin));
     }
 
+    /**
+     * Sends the sender all help messages within a specific command group.
+     * @param group Command group
+     * @param sender Sender requesting help
+     */
+    private void getHelp(final String group, final CommandSender sender) {
+        if (subCommands.containsKey(group)) {
+            final Class<? extends AbstractCommandGroup> subCommandClass = subCommands.get(group).getClass();
+            final CommandProcessor processor = new CommandProcessor(plugin, subCommandClass);
 
-    @Override
-    public String getHelp() {
-
-        return plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_HELP) + "\n" +
-                subCommands.get("reload").getHelp() +
-                subCommands.get("info").getHelp() +
-                subCommands.get("check").getHelp() +
-                subCommands.get("maxlives").getHelp() +
-                subCommands.get("toggle").getHelp() +
-                subCommands.get("set").getHelp();
+            sender.sendMessage(Message.HELP_FOR_GROUP.formatMessage(group));
+            processor.getSubCommandHelp().forEach(sender::sendMessage);
+        } else {
+            sender.sendMessage(Message.HELP_NOT_FOUND.formatMessage(group));
+        }
     }
 
     @Override
@@ -73,48 +89,26 @@ public class OuroborosCommand extends AbstractSubCommand implements CommandExecu
 
         if (label.equalsIgnoreCase("lives")) {
 
-            if (hasNoPermission(commandSender, OuroborosPermissions.USE_LIVES)) {
-                return true;
+            // Could implement the help command as a standalone command in the future
+            if (args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("help"))) {
+                commandSender.sendMessage(ChatColor.GREEN + "Use /lives help <group> to get command help.");
+                commandSender.sendMessage(ChatColor.GREEN + "Groups: " +
+                        ChatColor.RED + String.join(", ", subCommands.keySet()));
             }
 
-            if (args.length == 0) { // Executed /lives. Sends help message.
+            if (args.length > 1) {
+                final String group = args[0];
+                final String sub = args[1];
 
-                commandSender.sendMessage(getHelp());
-
-            }
-
-            if (args.length > 0) { // Executed /lives <arguments...>
-
-                final String argument = args[0];
-
-                if (argument.equalsIgnoreCase("help")) {
-
-                    commandSender.sendMessage(getHelp());
-                    return true;
-
+                if (group.equalsIgnoreCase("help")) {
+                    getHelp(sub, commandSender);
                 }
 
-                if (subCommands.containsKey(argument)) {
+                if (subCommands.containsKey(group)) {
+                    final Class<? extends AbstractCommandGroup> subCommandClass = subCommands.get(group).getClass();
+                    final CommandProcessor commandProcessor = new CommandProcessor(plugin, subCommandClass);
 
-                    /*
-                    Calls the registered command.
-                    What has to be noted here is that the first argument is passed as a label, while the args array
-                    is the same.
-                    Because of this, the arguments of the sub command will have the same array index as their
-                    position.
-
-                    For example: /lives get <player>
-
-                    Here a call to args[0] returns "get" and a call to args[1] returns "<player>".
-                     */
-                    subCommands.get(argument).onCommand(commandSender, command, argument, args);
-
-                } else {
-
-                    commandSender.sendMessage( plugin.getOuroborosMessage().getSimpleMessage(Message.LIVES_UNRECOGNISED) +
-                            " " + argument + "!");
-                    commandSender.sendMessage(getHelp());
-
+                    commandProcessor.executeSubCommands(commandSender, sub, Arrays.copyOfRange(args, 2, args.length));
                 }
 
             }

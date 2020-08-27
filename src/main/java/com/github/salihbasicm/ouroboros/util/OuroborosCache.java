@@ -6,21 +6,20 @@ import com.github.salihbasicm.ouroboros.OuroborosUser;
 
 import java.util.concurrent.TimeUnit;
 
-public class OuroborosUserCache {
+public class OuroborosCache {
 
-    private final LoadingCache<OuroborosUser, Integer> ouroborosCache;
+    private final LoadingCache<OuroborosUser, Integer> ouroborosUserCache;
 
-    public OuroborosUserCache() {
+    public OuroborosCache() {
 
-        ouroborosCache = Caffeine.newBuilder()
+        ouroborosUserCache = Caffeine.newBuilder()
                     .maximumSize(50L) // TODO: Make configurable
                     .expireAfterWrite(10, TimeUnit.MINUTES)
                     .build(OuroborosUser::getLives);
-
     }
 
-    public LoadingCache<OuroborosUser, Integer> getOuroborosCache() {
-        return ouroborosCache;
+    public LoadingCache<OuroborosUser, Integer> getUserCache() {
+        return ouroborosUserCache;
     }
 
 }

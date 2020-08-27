@@ -1,12 +1,16 @@
 package com.github.salihbasicm.ouroboros;
 
-import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
+import com.github.salihbasicm.ouroboros.messages.Message;
+import com.github.salihbasicm.ouroboros.storage.user.OuroborosUserStorage;
 import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
+import com.github.salihbasicm.ouroboros.util.OuroborosItem;
 import com.github.salihbasicm.ouroboros.util.OuroborosPermissions;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class OuroborosUser {
@@ -14,7 +18,7 @@ public class OuroborosUser {
     private final Ouroboros plugin;
     private final OuroborosConfig ouroborosConfig;
 
-    private final OuroborosStorage storage;
+    private final OuroborosUserStorage storage;
 
     private final Player user;
     private final UUID uuid;
@@ -26,7 +30,6 @@ public class OuroborosUser {
 
         this.uuid = user.getUniqueId();
 
-        // this.mySqlStorage = plugin.getMySqlStorage();
         this.storage = plugin.getStorage();
         this.ouroborosConfig = plugin.getOuroborosConfig();
     }
@@ -69,6 +72,30 @@ public class OuroborosUser {
         };
     }
 
+    public void useOuroborosItem(final ItemStack item) {
+        final int add = OuroborosItem.getAddFromOuroborosItem(plugin, item);
+        final boolean override = OuroborosItem.getOverrideFromOuroborosItem(plugin, item);
+        final int newLives = this.getCachedLives() + add;
+
+        if (override) {
+
+            this.updateLives(newLives);
+            this.getUser().sendMessage(Message.ITEM_USE_SUCCESS.formatMessage(add));
+            item.setAmount(item.getAmount() - 1);
+
+        } else {
+
+            if (newLives < this.getMaxLives()) {
+                this.updateLives(newLives);
+                this.getUser().sendMessage(Message.ITEM_USE_SUCCESS.formatMessage(add));
+                item.setAmount(item.getAmount() - 1);
+            } else {
+                this.getUser().sendMessage(Message.ITEM_USE_FAIL_MAXLIVES.formatMessage());
+            }
+
+        }
+    }
+
     /**
      * Gets the lives of this particular user.
      *
@@ -80,6 +107,19 @@ public class OuroborosUser {
         this.plugin.debugMessage("Retrieved lives for UUID[" + this.uuid + "] with value[" + lives + "]!");
 
         return lives;
+    }
+
+    /**
+     * Gets the cached lives of this particular user.
+     *
+     * @return Number of lives in cache
+     */
+    public int getCachedLives() {
+        this.plugin.debugMessage("Attempting to retrieve cached lives for UUID[ " + this.uuid + "] ...");
+        int cachedLives = Optional.ofNullable(plugin.getOuroborosCache().getUserCache().get(this)).orElse(-1);
+        this.plugin.debugMessage("Retrieved cached lives for UUID[" + this.uuid + "] with value[" + cachedLives + "]!");
+
+        return cachedLives;
     }
 
     /**

@@ -1,11 +1,11 @@
-package com.github.salihbasicm.ouroboros.storage;
+package com.github.salihbasicm.ouroboros.storage.user;
 
 import com.github.salihbasicm.ouroboros.OuroborosUser;
 
 /**
  * Represents data storage for the plugin
  */
-public interface OuroborosStorage {
+public interface OuroborosUserStorage {
 
     /**
      * Adds the user to storage if the user is not already present there.

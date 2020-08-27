@@ -23,19 +23,18 @@ SOFTWARE.
 
 package com.github.salihbasicm.ouroboros;
 
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.salihbasicm.ouroboros.commands.OuroborosCommand;
 import com.github.salihbasicm.ouroboros.hooks.PlaceholderapiExpansion;
-import com.github.salihbasicm.ouroboros.lang.OuroborosMessage;
 import com.github.salihbasicm.ouroboros.listeners.PlayerDeath;
 import com.github.salihbasicm.ouroboros.listeners.PlayerJoin;
 import com.github.salihbasicm.ouroboros.listeners.PlayerQuit;
-import com.github.salihbasicm.ouroboros.storage.FlatfileStorageProvider;
-import com.github.salihbasicm.ouroboros.storage.OuroborosStorage;
-import com.github.salihbasicm.ouroboros.storage.MySQLStorageProvider;
-import com.github.salihbasicm.ouroboros.storage.StorageType;
+import com.github.salihbasicm.ouroboros.listeners.PlayerUseItem;
+import com.github.salihbasicm.ouroboros.storage.item.ItemStorageFactory;
+import com.github.salihbasicm.ouroboros.storage.item.OuroborosItemStorage;
+import com.github.salihbasicm.ouroboros.storage.user.OuroborosUserStorage;
+import com.github.salihbasicm.ouroboros.storage.user.UserStorageFactory;
+import com.github.salihbasicm.ouroboros.util.OuroborosCache;
 import com.github.salihbasicm.ouroboros.util.OuroborosConfig;
-import com.github.salihbasicm.ouroboros.util.OuroborosUserCache;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,10 +46,10 @@ import java.util.logging.Level;
 public class Ouroboros extends JavaPlugin {
 
     private OuroborosConfig ouroborosConfig;
-    private OuroborosUserCache ouroborosUserCache;
-    private OuroborosMessage ouroborosMessage;
+    private OuroborosCache ouroborosCache;
 
-    private OuroborosStorage storage;
+    private OuroborosItemStorage itemStorage;
+    private OuroborosUserStorage userStorage;
 
     private boolean papiHooked = false;
 
@@ -62,12 +61,10 @@ public class Ouroboros extends JavaPlugin {
 
         ouroborosConfig = new OuroborosConfig(this.getConfig());
 
-        ouroborosMessage = new OuroborosMessage(this);
-        ouroborosMessage.saveDefaultMessages();
+        userStorage = new UserStorageFactory(this).getStorage(ouroborosConfig.getStorageType());
+        itemStorage = new ItemStorageFactory(this).getStorage(ouroborosConfig.getStorageType());
 
-        initializeStorage(ouroborosConfig.getStorageType());
-
-        ouroborosUserCache = new OuroborosUserCache();
+        ouroborosCache = new OuroborosCache();
 
         hookIntoPlaceholderAPI();
 
@@ -77,13 +74,13 @@ public class Ouroboros extends JavaPlugin {
         Objects.requireNonNull(this.getServer().getPluginCommand("lives")).setExecutor(livesCommand);
 
         toggledOff = new ArrayList<>();
-
     }
 
     private void registerListeners() {
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerUseItem(this), this);
     }
 
     private void hookIntoPlaceholderAPI() {
@@ -98,20 +95,6 @@ public class Ouroboros extends JavaPlugin {
 
             this.getLogger().warning("Could not hook into PlaceholderAPI. Some placeholders may not work!");
 
-        }
-
-    }
-
-    private void initializeStorage(final StorageType storageType) {
-
-        switch (storageType) {
-
-            case MYSQL:
-                storage = new MySQLStorageProvider(this);
-                break;
-            case FLATFILE:
-                storage = new FlatfileStorageProvider(this);
-                break;
         }
 
     }
@@ -164,16 +147,16 @@ public class Ouroboros extends JavaPlugin {
         return papiHooked;
     }
 
-    public LoadingCache<OuroborosUser, Integer> getOuroborosUserCache() {
-        return ouroborosUserCache.getOuroborosCache();
+    public OuroborosCache getOuroborosCache() {
+        return ouroborosCache;
     }
 
-    public OuroborosMessage getOuroborosMessage() {
-        return ouroborosMessage;
+    public OuroborosItemStorage getOuroborosItemStorage() {
+        return itemStorage;
     }
 
-    public OuroborosStorage getStorage() {
-        return storage;
+    public OuroborosUserStorage getStorage() {
+        return userStorage;
     }
 
 }

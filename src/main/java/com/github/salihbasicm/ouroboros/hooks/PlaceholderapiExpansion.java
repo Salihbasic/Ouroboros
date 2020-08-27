@@ -75,7 +75,7 @@ public class PlaceholderapiExpansion extends PlaceholderExpansion {
         switch (identifier) {
 
             case "lives":
-                return String.valueOf(plugin.getOuroborosUserCache().get(user));
+                return String.valueOf(plugin.getOuroborosCache().getUserCache().get(user));
             case "maxlives":
                 return String.valueOf(user.getMaxLives());
 
